@@ -1,6 +1,18 @@
 ######################################
 #######realsense plotting#############
 ######################################
+'''
+Working with
+	UBUNTU 16.04 LTS
+	OPENCV 4.0~
+	Python 3.6
+	pyrealsense2
+	matplotlib
+	numpy
+
+	for intel D435i
+
+'''
 import pyrealsense2 as rs
 import numpy as np
 import cv2
