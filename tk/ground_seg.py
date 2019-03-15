@@ -35,6 +35,7 @@ font = cv2 .FONT_HERSHEY_SCRIPT_SIMPLEX
 fontScale = 1.5
 yellow = (0,255,255)
 
+
 try:
     while True:
 
@@ -64,6 +65,7 @@ try:
 
         abs_x = []
         abs_y = []
+        ground_center_idx = []
 
         #depth_image2[360] = depth_image2[360] * float(depth_scale)
         for idx, temp in enumerate(_640col):
@@ -74,6 +76,7 @@ try:
                 _640col[idx] = temp * depth_scale
                 abs_x.append(temp * depth_scale*math.cos(((float)(58.0/2.0-58.0*(float)(idx)/720.0))*3.14/180.0))
                 abs_y.append(temp * depth_scale * math.sin(float(58.0/2.0 - 58.0 * (float)(idx) / 720.0)*3.14/180.0))
+
             #print((float)(58.0 - 58.0 * (float)(idx) * 2.0 / 720.0))
             #print(math.cos((float)(58.0 - 58.0 * (float)(idx) * 2.0 / 720.0)))
             #print(temp * depth_scale*math.cos((float)(58.0-58.0*(float)(idx)*2.0/720.0)))
@@ -83,18 +86,44 @@ try:
         #print("1212" + str(depth_image2[360][12]))
         #y = list(range(0,1280))
         #print(len(y))
-        plt.plot(abs_x, abs_y)
-        #plt.show()
-        plt.xlim(0, 2)
-        plt.ylim(-2, 2)
+        idx=0
+        while abs_x[720-30-idx]==None:
+            idx+=1
+            #print("FUCKFUCK")
+        ground_center_idx.append(720-30-idx)
+        i=0
+        idx=31
+        while idx<720:
+            try:
+                if abs_x[720-idx] == None:
+                    idx+=5
+                    #print("FUCK")
+            #(abs( abs_x[ground_center_idx[i]] - abs_x[(720-idx)]) < 0.15 ) and
 
-        plt.pause(0.05)
-        plt.cla()
-        plt.clf()
+                elif (abs( abs_x[ground_center_idx[i]] - abs_x[(720-idx)]) < 0.4 ) and (abs( abs_y[ground_center_idx[0]] - abs_y[(720-idx)])<0.05):
+                    ground_center_idx.append((720-idx))
+                    i += 1
+                    idx += 5
+                    cv2.circle(images, (640, (720-idx)), 5, (0, 255, 0), 5)
+                    #print(idx)
+                    #print("FUCKFUCKFUCK")
+                else:
+                    idx+=5
+
+            except:
+                print("FOUND FUCKING NONE")
+
+        #plt.plot(abs_x, abs_y)
+        #plt.xlim(0, 2)
+        #plt.ylim(-2, 2)
+
+        #plt.pause(0.05)
+        #plt.cla()
+        #plt.clf()
 
         # Apply colormap on depth image (image must be converted to 8-bit per pixel first)5
-        cv2.circle(images, (640, 600), 5, (255, 255, 255), 10)
-        cv2.putText(images, str(_640col[600]) + "m", (640, 600), font, fontScale, yellow, 2 )
+        cv2.circle(images, (640, 690), 5, (255, 255, 255), 10)
+        cv2.putText(images, str(_640col[600]) + "m", (640, 690), font, fontScale, yellow, 2 )
         cv2.line(images, (640, 0), (640, 720), (0, 0, 0), 5)
         # Show images
         cv2.namedWindow('RealSense', cv2.WINDOW_AUTOSIZE)
