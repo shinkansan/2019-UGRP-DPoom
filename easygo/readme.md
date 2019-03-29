@@ -74,3 +74,68 @@ To start easygo.py
 # easyGo
 
 Source: [./easygo/easyGo.py](./easygo/easygo.py)
+
+
+you can import this by
+```bash
+#if your py file and easygo file in same dir
+from easyGo import easygo
+```
+
+### Stop
+```bash
+easyGo.stop(pub, verbose=0)
+#Stop All Vector (x,y,z)
+```
+## Verbose ?
+Verbose = 0 (default) Don;t print status
+| Verbose = 1 Print Everything
+
+### Rotate
+```bash
+easyGo.mvRotate(pub, speed, angle, clockwise, verbose=0)
+'''Rotate {0} degree with {1} degree/sec Clockwise = {2}'''
+```
+pub is for Publisher, Example code is below
+
+
+### Forward/Backward
+```bash
+easyGo.mvStraight(pub, speed, angle, verbose=0)
+#Stop All Vector (x,y,z)
+```
+angle = -1 is for inf go, the example code is below
+
+
+### function example
+```bash
+if __name__ == '__main__':
+    try:
+        rospy.init_node('robot_goForward', anonymous=True)
+        velocity_publisher = rospy.Publisher('cmd_vel', Twist, queue_size=10)
+
+        speed = float(input("Input your speed (degrees/sec):"))
+        angle = float(input("Type your distance (degrees):"))
+        clockwise = input("Clockwise?: ") #True or false
+        # Testing our function
+
+        #rotate(speed, angle, clockwise)
+
+        #Verbose = 0 (default) Don;t print status
+        #Verbose = 1 Print Everything
+
+
+        '''   Infinity go Example ..........break condition DIY
+        t0 = rospy.Time.now().to_sec()
+        while True:
+            mvStraight(velocity_publisher, speed, angle, 1)
+            t1 = rospy.Time.now().to_sec()
+            if t1-t0 > 10:
+                break
+        stop()        
+        '''
+
+
+    except rospy.ROSInterruptException:
+        pass
+```
