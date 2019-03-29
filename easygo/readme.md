@@ -73,7 +73,7 @@ To start easygo.py
 
 # easyGo
 
-Source: [./easygo/easyGo.py](./easygo/easygo.py)
+Source: [./easyGo.py](./easyGo.py)
 
 
 you can import this by
