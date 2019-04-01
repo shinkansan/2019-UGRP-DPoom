@@ -4,8 +4,7 @@
 2019 DGIST 소형자율주행로봇 플랫폼 구축 및 RGB-D 센서 구축 UGRP
 ---
 
-
-## 개발 소개
+## 개발 소개 ![build_status](https://img.shields.io/badge/build-WIP-yellow.svg)
 
 ### Origin of name
 디품(Dpoom)은 개발자 중 한명의 애묘인 품이의 이름을 따서 Digitalized 품 | ~~DGIST 품~~ 을 노려서 만들었습니다.

@@ -71,7 +71,8 @@ To start easygo.py
 3. if you want run easygo or your py file, for test. just run it by python command
 4. Checkout catkin_pkg make tutorial from above docs
 
-# easyGo
+# easyGo ![build badge](https://img.shields.io/badge/build-passing-green.svg)
+
 
 Source: [./easyGo.py](./easyGo.py)
 
