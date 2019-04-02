@@ -21,8 +21,9 @@ We have very unique and seems counter-productive tradition on this squad. It is 
 
 ### Develop Schedule
   1. 19' 1Q (formal 9to9 start since March)
-    Week 1. Setup development environment
-
+    __Week 1.__ Setup development environment
+    __Week 2.__ Ground Segmentation
+    __Week 3.__ Turtlebot3 Waffle pi Setup for testbed and change platform Computer to Lattepanda Alpha 
 
 ### Acknowledgement
-This research is funded by <br/> DGIST Undergraduate research program (grants number : ugrp-21)<br/> SAMSUNG Research IRP (grants number : 2019IR-203)
+This research is funded by <br/> DGIST Undergraduate research program (grants number : ugrp-21)<br/> SAMSUNG Research IRP (grants number : )
