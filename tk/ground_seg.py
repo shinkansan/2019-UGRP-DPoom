@@ -27,9 +27,10 @@ COL= 720
 ROW = 1280
 
 VERTICAL_CORRECTION = 0.15 #0.45  #parameter of correction for parabola to linear
-WARP_PARAM = 0.45  #value should be 0.0 ~ 1.0. Bigger get more warped.
-GRN_ROI = 400 #The index of col that want to consider as ground ROI
-ZOOM_PARAM = 0.15 #Force calibrating the depth image to match the color image
+WARP_PARAM = 0.45  #value should be 0.0 ~ 1.0. Bigger get more warped. 0.45
+GRN_ROI = 300 #The index of col that want to consider as ground ROI 400
+ZOOM_PARAM = 0.15 #Force calibrating the depth image to match the color image 0.15
+UNAVAILABLE_THRES = 500 #The index of col that is threshold of unavailable virtual lane
 font = cv2.FONT_HERSHEY_SCRIPT_SIMPLEX
 fontScale = 1.5
 yellow = (0, 255, 255)
@@ -96,28 +97,41 @@ def verticalGround(depth_image2, images, numCol, plot):
         ground_center_idx.append(COL - idx)  #ground_center_idx contains all the indexes of ground.
     except:
         print("TOO CLOSE!!!!!!!!!!!!!")
+        ground_center_idx.append(COL - 30)
     i = 0
     groundCount = 0  #Count points that considered as ground
     hurdleCount = 0  #Count points that not considered as ground subsequently. Initialize it to zero when found ground.
     while idx < COL:
         try:
             if abs_x[COL - idx] == None or abs_y[COL - idx] == None:
-                idx += 10
-                hurdleCount += 1
+                idx += 1
+                continue
                 # print("FUCK")
             # (abs(abs_x[ground_center_idx[i]] - abs_x[(720 - idx)]) < 0.4) and (
 
+
             #To found ground indexes, we use differential. If variation dy/dx is lower than threshold, append it.
-            elif abs(((abs_y[ground_center_idx[i]]+abs_y[ground_center_idx[0]])/2 - abs_y[(COL - idx)])/(abs_x[ground_center_idx[i]] - abs_x[(COL - idx)])) < 0.08:
+            ####################################################################################################
+            #######19/04/26 : I have updated the way of checking gradient. Now I use two gradients##############
+            #######from original, and from the current ground pixel. It works better ###########################
+            ####################################################################################################
+            gradient_from_original = (abs_y[(COL - idx)] - abs_y[ground_center_idx[0]]) / (abs_x[(COL - idx)] - abs_x[ground_center_idx[0]])
+            gradient_from_current = (abs_y[(COL - idx)] - abs_y[ground_center_idx[i]]) / (abs_x[(COL - idx)] - abs_x[ground_center_idx[i]])
+            #print("#######")
+            #print("idx " + str(COL-idx))
+            #print("original" + str(gradient_from_original))
+            #print("current" + str(gradient_from_current))
+            #print("dist" + str(_640col[COL - idx]))
+            if abs(gradient_from_original + 0.4) < 0.3 and abs(gradient_from_current) < 1.5:   #These number are carefully selected
                 ground_center_idx.append((COL - idx))
                 i += 1
-                idx += 10
                 cv2.circle(images, (numLine, (COL - idx)), 5, (0, 255, 0), 5)
                 groundCount += 1
                 hurdleCount = 0
                 # print(idx)
-                # print("FUCKFUCKFUCK")
-            elif hurdleCount > 15:
+                #print("FUCKFUCKFUCK")
+                idx += 5
+            elif hurdleCount > 3:
                 break
             else:
                 hurdleCount += 1
@@ -132,7 +146,7 @@ def verticalGround(depth_image2, images, numCol, plot):
             plt.scatter(abs_x[ground_center_idx[0]], abs_y[ground_center_idx[0]], color='r',
                         s=20)  # red point on start point of ground
             plt.scatter(abs_x[ground_center_idx[-1]], abs_y[ground_center_idx[-1]], color='r', s=20)
-            plt.xlim(0, 5)
+            plt.xlim(0, 2)  #5
             plt.ylim(-2, 2)
 
             plt.pause(0.05)
@@ -142,14 +156,21 @@ def verticalGround(depth_image2, images, numCol, plot):
             pass
 
     if groundCount < 3:
+        #print("FUCK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        dead_end = COL
         cv2.line(images, (numLine, 0), (numLine, ROW), (0, 0, 255), 5)  #Draw a red line when ground indexes is less than we want.
     else:
+        dead_end = ground_center_idx[-1]
         cv2.line(images, (numLine, ground_center_idx[-1]), (numLine, COL), (0, 255, 0), 5) #Draw a green line.
-    # Apply colormap on depth image (image must be converted to 8-bit per pixel first)5
-    cv2.circle(images, (numLine, 690), 5, (255, 255, 255), 10)
-    cv2.putText(images, str(round(_640col[600],2)) + "m", (numLine, 690), font, fontScale, yellow, 2)
 
-    return images
+    try:
+        # Apply colormap on depth image (image must be converted to 8-bit per pixel first)5
+        cv2.circle(images, (numLine, ground_center_idx[0]), 5, (255, 255, 255), 10)
+        cv2.putText(images, str(round(abs_x[ground_center_idx[0]],2)) + "m", (numLine, COL - 100), font, fontScale, yellow, 2)
+    except:
+        pass
+
+    return images, dead_end
 
 
 def preGroundSeg(depth_image, color_image):
@@ -170,9 +191,37 @@ def preGroundSeg(depth_image, color_image):
 
 def GroundSeg(depth_image, color_image, stride=160):
     global ROW
+    virtual_lane_available = []
     for i in range(stride, ROW, stride):
-        temp_image = verticalGround(depth_image, color_image, i, plot=False)
-    return temp_image
+        if i == ROW/2:
+            temp_image, dead_end = verticalGround(depth_image, color_image, i, plot=False)
+        else:
+            temp_image, dead_end = verticalGround(depth_image, color_image, i, plot=False)
+        virtual_lane_available.append(dead_end)
+    return temp_image, virtual_lane_available
+
+
+def LaneHandling(virtual_lane_available, unavailable_thres, n):
+    center = int(len(virtual_lane_available)/2)
+
+    #if center lane is getting on threshold
+    if virtual_lane_available[center] > unavailable_thres:
+        if virtual_lane_available[center-n] > unavailable_thres and virtual_lane_available[center+n] > unavailable_thres:
+            n+=1
+            if n > center:
+                print("GO BACK")
+            else:
+                LaneHandling(virtual_lane_available, unavailable_thres, n)
+        elif virtual_lane_available[center-n] > unavailable_thres:
+            print("TURN RIGHT")
+        elif virtual_lane_available[center+n] > unavailable_thres:
+            print("TURN LEFT")
+        elif virtual_lane_available[center-n] > virtual_lane_available[center+n]:
+            print("TURN RIGHT")
+        else:
+            print("TURN LEFT")
+    else:
+        print("GO STRAIGHT")
 
 
 def main():
@@ -223,7 +272,10 @@ def main():
             #first step
             depth_image, color_image = preGroundSeg(depth_image, color_image)
             #last step
-            color_image = GroundSeg(depth_image, color_image)
+            color_image, virtual_lane_available = GroundSeg(depth_image, color_image)
+            #handling lane
+            cv2.line(color_image, (0, UNAVAILABLE_THRES), (ROW, UNAVAILABLE_THRES), (0, 255, 0), 2)
+            LaneHandling(virtual_lane_available, UNAVAILABLE_THRES, 1)
 
             # Stack both images horizontally
             # images = np.hstack((color_image, depth_colormap))
