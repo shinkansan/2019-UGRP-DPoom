@@ -94,15 +94,16 @@ Verbose = 0 (default) Don;t print status
 
 ### Rotate
 ```bash
-easyGo.mvRotate(pub, speed, angle, clockwise, verbose=0)
+easyGo.mvRotate(speed, angle, clockwise, verbose=0)
 '''Rotate {0} degree with {1} degree/sec Clockwise = {2}'''
 ```
-pub is for Publisher, Example code is below
+
+if angle=-1, turn CW/CCW continuously</br>
 
 
 ### Forward/Backward
 ```bash
-easyGo.mvStraight(pub, speed, angle, verbose=0)
+easyGo.mvStraight(speed, angle, verbose=0)
 #Stop All Vector (x,y,z)
 ```
 angle = -1 is for inf go, the example code is below
@@ -140,3 +141,23 @@ if __name__ == '__main__':
     except rospy.ROSInterruptException:
         pass
 ```
+
+
+# easyControl ![build badge](https://img.shields.io/badge/Version-beta-yellow.svg)
+go to source [./easyControl.py](./easyControl.py)
+
+easyControl is for operating turtlebot by keyboard input
+
+it should be working which keyCap.py
+
+## Basic keyset
+  w : go forward</br>
+  a : turn counter clockwise</br>
+  s : go backward</br>
+  d : turn clockwise</br>
+  q : stop & terminate program</br>
+  x : set default speed</br>
+  e : speed up by 0.1</br>
+  c : speed down by 0.2</br>
+
+Any keyevent which is not on the above is for e-stop
