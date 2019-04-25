@@ -1,7 +1,26 @@
 #!/usr/bin/env python
 import rospy
+import math
 from geometry_msgs.msg import Twist
+from sensor_msgs.msg import Imu
+from std_msgs.msg import Float32
+from tf.transformations import euler_from_quaternion
+import time
 PI = 3.1415926535897
+
+
+def main():
+    try:
+        print('EasyGo Activated')
+        #rospy.init_node('robot_easygo', anonymous=False)
+
+        global velocity_publisher
+        velocity_publisher = rospy.Publisher('cmd_vel', Twist, queue_size=10)
+        imu_sub = rospy.Subscriber('imu', Imu, imu_callback)
+        enc_sub = rospy.Subscriber('cmd_vel', Twist, encoder_callback)
+    except rospy.ROSInterruptException:
+        pass
+
 
 def printv(text, verbose):
         if verbose==0:
@@ -11,7 +30,7 @@ def printv(text, verbose):
 
 def stop(verbose=0):
     #Starts a new node
-    rospy.init_node('robot_goForward', anonymous=True)
+    rospy.init_node('robot_mvs', anonymous=True)
     velocity_publisher = rospy.Publisher('cmd_vel', Twist, queue_size=10)
     vel_msg = Twist()
     vel_msg.linear.x=0
@@ -19,6 +38,7 @@ def stop(verbose=0):
     vel_msg.linear.z=0
     vel_msg.angular.x = 0
     vel_msg.angular.y = 0
+    vel_msg.angular.z = 0
     vel_msg.linear.x= 0
     velocity_publisher.publish(vel_msg)
     printv('Force STOP', verbose)
@@ -26,24 +46,29 @@ def stop(verbose=0):
 
 def mvRotate(speed, angle, clockwise, verbose=0):
     #Starts a new node
-    rospy.init_node('robot_rotate', anonymous=True)
-    velocity_publisher = rospy.Publisher('cmd_vel', Twist, queue_size=10)
+    rospy.init_node('robot_mvs', anonymous=True)
+    #velocity_publisher = rospy.Publisher('cmd_vel', Twist, queue_size=10)
     vel_msg = Twist()
 
     # Receiveing the user's input
     rospy.loginfo("Rotate {0} degree with {1} degree/sec Clockwise = {2}".format(speed, angle, clockwise)  )
-    
+
 
     #Converting from angles to radians
     angular_speed = speed*2*PI/360
     relative_angle = angle*2*PI/360
 
     #We wont use linear components
-    vel_msg.linear.x=0
-    vel_msg.linear.y=0
-    vel_msg.linear.z=0
-    vel_msg.angular.x = 0
-    vel_msg.angular.y = 0
+
+
+    if angle==-1:
+        if clockwise:
+            vel_msg.angular.z = -abs(angular_speed)
+        else:
+            vel_msg.angular.z = abs(angular_speed)
+        velocity_publisher.publish(vel_msg)
+        return
+
 
     # Checking if our movement is CW or CCW
     if clockwise:
@@ -53,7 +78,7 @@ def mvRotate(speed, angle, clockwise, verbose=0):
     # Setting the current time for distance calculus
     t0 = rospy.Time.now().to_sec()
     current_angle = 0
-    
+
 
     while(current_angle < relative_angle):
         velocity_publisher.publish(vel_msg)
@@ -67,20 +92,18 @@ def mvRotate(speed, angle, clockwise, verbose=0):
     velocity_publisher.publish(vel_msg)
     printv('STOP', verbose)
 
-def mvStraight(pub, speed, angle, verbose=0):
+def mvStraight(speed, angle, verbose=0):
     #Starts a new node
-    velocity_publisher = pub
+    rospy.init_node('robot_mvs', anonymous=True)
     vel_msg = Twist()
     angular_speed = speed*2*PI/360
+    relative_angle = angle*2*PI/360
     vel_msg.linear.x= angular_speed
-    vel_msg.linear.y=0
-    vel_msg.linear.z=0
-    vel_msg.angular.x = 0
-    vel_msg.angular.y = 0
+
     t0 = rospy.Time.now().to_sec()
     current_angle = 0
     if angle == -1:
-        printv('while mode : go straight inf until break', verbose)
+        printv('inf mode : go straight inf until break', verbose)
         velocity_publisher.publish(vel_msg)
     else:
         while(current_angle < relative_angle):
@@ -90,26 +113,50 @@ def mvStraight(pub, speed, angle, verbose=0):
         vel_msg.linear.x= 0
         velocity_publisher.publish(vel_msg)
         printv('STOP', verbose)
-        
-    
+
+def imu_callback(incomming_msg):
+    list_orientation = [incomming_msg.orientation.x, incomming_msg.orientation.y,
+                           incomming_msg.orientation.z, incomming_msg.orientation.w]
+    roll, pitch, yaw = euler_from_quaternion(list_orientation)
+
+    # Showing IMU Data by plot, execute in terminal "rqt_plot"
+    pub_imu_roll = rospy.Publisher('IMU_Roll', Float32, queue_size=10)
+    pub_imu_pitch = rospy.Publisher('IMU_Pitch', Float32, queue_size=10)
+    pub_imu_yaw = rospy.Publisher('IMU_Yaw', Float32, queue_size=10)
+
+
+    return roll, pitch, yaw
+
+def encoder_callback(incomming_msg):
+    list_orientation = [incomming_msg.linear.x, incomming_msg.linear.y,
+                          incomming_msg.linear.z]
+
+    #list_angular =  [incomming_msg.angular.x, incomming_msg.angular.y,
+                           #incomming_msg.angular.z]
+
+
+    return list_orientation
+
+
+main()
+
+
 
 
 if __name__ == '__main__':
     try:
-        rospy.init_node('robot_goForward', anonymous=True)
-        velocity_publisher = rospy.Publisher('cmd_vel', Twist, queue_size=10)
-        
+
         speed = float(input("Input your speed (degrees/sec):"))
         angle = float(input("Type your distance (degrees):"))
         clockwise = input("Clockwise?: ") #True or false
         # Testing our function
-        
+
         #rotate(speed, angle, clockwise)
-        
+
         #Verbose = 0 (default) Don;t print status
         #Verbose = 1 Print Everything
-        
-        
+        mvStraight(speed, angle, 1)
+
         '''   Infinity Example ..........break condition DIY
         t0 = rospy.Time.now().to_sec()
         while True:
@@ -117,9 +164,9 @@ if __name__ == '__main__':
             t1 = rospy.Time.now().to_sec()
             if t1-t0 > 10:
                 break
-        stop()        
+        stop()
         '''
-        
-        
+
+
     except rospy.ROSInterruptException:
         pass
