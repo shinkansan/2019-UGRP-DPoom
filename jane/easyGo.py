@@ -96,9 +96,9 @@ def mvStraight(pub, speed, angle, verbose=0):
         printv('STOP', verbose)
 
 def imu_callback(incomming_msg):
-	list_orientation = [incomming_msg.orientation.x, incomming_msg.orientation.y,
+    list_orientation = [incomming_msg.orientation.x, incomming_msg.orientation.y,
 						   incomming_msg.orientation.z, incomming_msg.orientation.w]
-	roll, pitch, yaw = euler_from_quaternion(list_orientation)
+    roll, pitch, yaw = euler_from_quaternion(list_orientation)
 
     # Showing IMU Data by plot, execute in terminal "rqt_plot"
     pub_imu_roll = rospy.Publisher('IMU_Roll', Float32, queue_size=10)
@@ -109,14 +109,12 @@ def imu_callback(incomming_msg):
     return roll, pitch, yaw
 
 def encoder_callback(incomming_msg):
-	list_orientation = [incomming_msg.linear.x, incomming_msg.linear.y,
+    list_orientation = [incomming_msg.linear.x, incomming_msg.linear.y,
 						  incomming_msg.linear.z]
-
-	#list_angular =  [incomming_msg.angular.x, incomming_msg.angular.y,
-						   #incomming_msg.angular.z]
-
-
+    #list_angular =  [incomming_msg.angular.x, incomming_msg.angular.y,
+    # #incomming_msg.angular.z]
     return list_orientation
+
 if __name__ == '__main__':
     try:
         rospy.init_node('robot_easygo', anonymous=True)
@@ -127,12 +125,9 @@ if __name__ == '__main__':
         angle = float(input("Type your distance (degrees):"))
         clockwise = input("Clockwise?: ") #True or false
         # Testing our function
-
         #rotate(speed, angle, clockwise)
-
         #Verbose = 0 (default) Don;t print status
         #Verbose = 1 Print Everything
-
 
         '''   Infinity Example ..........break condition DIY
         t0 = rospy.Time.now().to_sec()
