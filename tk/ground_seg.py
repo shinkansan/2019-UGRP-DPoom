@@ -19,6 +19,7 @@ import cv2
 import matplotlib.pyplot as plt
 import math
 import time
+#import tk.easyGo as easyGo
 
 global depth_scale, ROW, COL
 
@@ -26,11 +27,15 @@ global depth_scale, ROW, COL
 COL= 720
 ROW = 1280
 
+#ROBOT MOVE
+SPEED = 5
+ROTATE_SPEED = 10
+
 VERTICAL_CORRECTION = 0.15 #0.45  #parameter of correction for parabola to linear
 WARP_PARAM = 0.45  #value should be 0.0 ~ 1.0. Bigger get more warped. 0.45
 GRN_ROI = 300 #The index of col that want to consider as ground ROI 400
 ZOOM_PARAM = 0.15 #Force calibrating the depth image to match the color image 0.15
-UNAVAILABLE_THRES = 350 #The index of col that is threshold of unavailable virtual lane
+UNAVAILABLE_THRES = 450 #The index of col that is threshold of unavailable virtual lane
 ROBOT_WIDTH_LIST = [2,3,4,5]
 ROBOT_LEFT = 1
 ROBOT_RIGHT = 6
@@ -215,25 +220,58 @@ def bool_straight(virtual_lane_available, unavailable_thres):
 def LaneHandling(virtual_lane_available, unavailable_thres, n):
     center = int(len(virtual_lane_available)/2)
 
-    #if center lane is getting on threshold
-    if not bool_straight(virtual_lane_available, unavailable_thres):
+    #If center lane is blocked.
+    if virtual_lane_available[center] > unavailable_thres:
         #two lanes are both unavailable
+        if n > center:
+            print("GO BACK")
+            return 0
         if virtual_lane_available[center-n] > unavailable_thres and virtual_lane_available[center+n] > unavailable_thres:
             n+=1
             if n > center:
                 print("GO BACK")
+                return 0
             else:
                 LaneHandling(virtual_lane_available, unavailable_thres, n)
         elif virtual_lane_available[center-n] > unavailable_thres:
             print("TURN RIGHT")
+            return 3
         elif virtual_lane_available[center+n] > unavailable_thres:
             print("TURN LEFT")
+            return 2
         else:
             n += 1
             LaneHandling(virtual_lane_available, unavailable_thres, n)
+    #Checking where is future obstable and avoid it.
     else:
-        print("GO STRAIGHT")
+        if n > center:
+            print("GO STRAIGHT")
+            return 1
+        if virtual_lane_available[center-n] > unavailable_thres:
+            print("TURN RIGHT")
+            return 3
+        elif virtual_lane_available[center+n] > unavailable_thres:
+            print("TURN LEFT")
+            return 2
+        else:
+            n+=1
+            if n > center:
+                print("GO STRAIGHT")
+                return 1
+            else:
+                LaneHandling(virtual_lane_available, unavailable_thres, n)
 
+'''
+def GoEasy(direc):
+    if direc == 0:
+        easyGo.mvStraight(-SPEED, -1)
+    elif direc == 1:
+        easyGo.mvStraight(SPEED, -1)
+    elif direc == 2:
+        easyGo.mvRotate(ROTATE_SPEED, -1, False)
+    elif direc == 3:
+        easyGo.mvRotate(ROTATE_SPEED, -1, True)
+'''
 
 def main():
     # Configure depth and color streams
@@ -241,6 +279,8 @@ def main():
     fpsFlag = False
     numFrame = 0
     fps = 0.0
+
+    #easyGo.mvStraight(0, -1)
 
     while 1:
         try:
@@ -265,7 +305,6 @@ def main():
     startTime = time.time()
 
     while True:
-
         try:
             # Wait for a coherent pair of frames: depth and color
             frames = pipeline.wait_for_frames()
@@ -287,6 +326,7 @@ def main():
             # handling lane
             cv2.line(color_image, (0, UNAVAILABLE_THRES), (ROW, UNAVAILABLE_THRES), (0, 255, 0), 2)
 
+            #GoEasy(LaneHandling(virtual_lane_available, UNAVAILABLE_THRES, 1))
             LaneHandling(virtual_lane_available, UNAVAILABLE_THRES, 1)
 
             # Stack both images horizontally
@@ -305,11 +345,14 @@ def main():
                 fps = round((float)(numFrame) / (endTime - startTime), 2)
                 print("###FPS = " + str(fps) + " ###")
 
-        except:
-            pass
+        except KeyboardInterrupt:
+            print("KEY!!!!!!!!!!!!!!!!!!!!!")
+            pipeline.stop()
+            #easyGo.stop()
 
     # Stop streaming
     pipeline.stop()
+    easyGo.stop()
 
 if __name__ == "__main__":
     main()
