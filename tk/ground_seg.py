@@ -30,7 +30,11 @@ VERTICAL_CORRECTION = 0.15 #0.45  #parameter of correction for parabola to linea
 WARP_PARAM = 0.45  #value should be 0.0 ~ 1.0. Bigger get more warped. 0.45
 GRN_ROI = 300 #The index of col that want to consider as ground ROI 400
 ZOOM_PARAM = 0.15 #Force calibrating the depth image to match the color image 0.15
-UNAVAILABLE_THRES = 500 #The index of col that is threshold of unavailable virtual lane
+UNAVAILABLE_THRES = 350 #The index of col that is threshold of unavailable virtual lane
+ROBOT_WIDTH_LIST = [2,3,4,5]
+ROBOT_LEFT = 1
+ROBOT_RIGHT = 6
+
 font = cv2.FONT_HERSHEY_SCRIPT_SIMPLEX
 fontScale = 1.5
 yellow = (0, 255, 255)
@@ -200,12 +204,20 @@ def GroundSeg(depth_image, color_image, stride=160):
         virtual_lane_available.append(dead_end)
     return temp_image, virtual_lane_available
 
+def bool_straight(virtual_lane_available, unavailable_thres):
+    global ROBOT_WIDTH_LIST
+    for i in ROBOT_WIDTH_LIST:
+        # > means unavailable path
+        if virtual_lane_available[i] > unavailable_thres:
+            return False
+    return True
 
 def LaneHandling(virtual_lane_available, unavailable_thres, n):
     center = int(len(virtual_lane_available)/2)
 
     #if center lane is getting on threshold
-    if virtual_lane_available[center] > unavailable_thres:
+    if not bool_straight(virtual_lane_available, unavailable_thres):
+        #two lanes are both unavailable
         if virtual_lane_available[center-n] > unavailable_thres and virtual_lane_available[center+n] > unavailable_thres:
             n+=1
             if n > center:
@@ -216,10 +228,9 @@ def LaneHandling(virtual_lane_available, unavailable_thres, n):
             print("TURN RIGHT")
         elif virtual_lane_available[center+n] > unavailable_thres:
             print("TURN LEFT")
-        elif virtual_lane_available[center-n] > virtual_lane_available[center+n]:
-            print("TURN RIGHT")
         else:
-            print("TURN LEFT")
+            n += 1
+            LaneHandling(virtual_lane_available, unavailable_thres, n)
     else:
         print("GO STRAIGHT")
 
@@ -253,9 +264,9 @@ def main():
     #COL=720, ROW=1280
     startTime = time.time()
 
-    try:
-        while True:
+    while True:
 
+        try:
             # Wait for a coherent pair of frames: depth and color
             frames = pipeline.wait_for_frames()
             depth_frame = frames.get_depth_frame()
@@ -269,35 +280,36 @@ def main():
             color_image = np.asanyarray(color_frame.get_data())
             # print(depth_image[360][550], len(depth_image[0]), str(depth_image[360][550] * depth_scale) + "m")
 
-            #first step
+            # first step
             depth_image, color_image = preGroundSeg(depth_image, color_image)
-            #last step
+            # last step
             color_image, virtual_lane_available = GroundSeg(depth_image, color_image)
-            #handling lane
+            # handling lane
             cv2.line(color_image, (0, UNAVAILABLE_THRES), (ROW, UNAVAILABLE_THRES), (0, 255, 0), 2)
+
             LaneHandling(virtual_lane_available, UNAVAILABLE_THRES, 1)
 
             # Stack both images horizontally
             # images = np.hstack((color_image, depth_colormap))
-
-
 
             # Show images
             cv2.namedWindow('RealSense', cv2.WINDOW_AUTOSIZE)
             cv2.imshow('RealSense', color_image)
             cv2.waitKey(1)
 
-            #FPS
+            # FPS
             numFrame += 1
 
             if cv2.waitKey(33) == ord('f'):
                 endTime = time.time()
-                fps = round((float)(numFrame)/(endTime - startTime),2)
+                fps = round((float)(numFrame) / (endTime - startTime), 2)
                 print("###FPS = " + str(fps) + " ###")
 
-    finally:
-        # Stop streaming
-        pipeline.stop()
+        except:
+            pass
+
+    # Stop streaming
+    pipeline.stop()
 
 if __name__ == "__main__":
     main()
