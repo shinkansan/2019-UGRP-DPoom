@@ -7,6 +7,16 @@ MORP is a novel algorithm for small robots, designed to drive efficiently in an 
 ![./milestone](../img/milestone.png)
 ![.MORP](../img/MORP.png)
 
+## Dependency
+```bash
+import pyrealsense2 as rs
+import numpy as np
+import cv2
+import matplotlib.pyplot as plt
+import math
+import time #if you want to see FPS
+```
+
 ## How to import MORP (D435i is needed) ![build badge](https://img.shields.io/badge/build-passing-green.svg)
 go to source [./ground_seg.py](./ground_seg.py)
 
