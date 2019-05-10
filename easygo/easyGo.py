@@ -7,7 +7,7 @@ from std_msgs.msg import Float32
 from tf.transformations import euler_from_quaternion
 import time
 PI = 3.1415926535897
-
+Magic_value = 1.7375
 
 def main():
     try:
@@ -16,7 +16,7 @@ def main():
 
         global velocity_publisher
         velocity_publisher = rospy.Publisher('cmd_vel', Twist, queue_size=10)
-        imu_sub = rospy.Subscriber('imu', Imu, imu_callback)
+        imu_sub = rospy.Subscriber('imu/yaw', Imu, imu_callback)
         enc_sub = rospy.Subscriber('cmd_vel', Twist, encoder_callback)
     except rospy.ROSInterruptException:
         pass
@@ -92,6 +92,12 @@ def mvRotate(speed, angle, clockwise, verbose=0):
     velocity_publisher.publish(vel_msg)
     printv('STOP', verbose)
 
+def mvCurve(x, y, verbose=0):
+    rospy.init_node('robot_mvs', anonymous=True)
+    vel_msg = Twist()
+    vel_msg.linear.x= x
+    vel_msg.angular.z=y
+    velocity_publisher.publish(vel_msg)
 def mvStraight(speed, angle, verbose=0):
     #Starts a new node
     rospy.init_node('robot_mvs', anonymous=True)
@@ -115,14 +121,7 @@ def mvStraight(speed, angle, verbose=0):
         printv('STOP', verbose)
 
 def imu_callback(incomming_msg):
-    list_orientation = [incomming_msg.orientation.x, incomming_msg.orientation.y,
-                           incomming_msg.orientation.z, incomming_msg.orientation.w]
-    roll, pitch, yaw = euler_from_quaternion(list_orientation)
-
-    # Showing IMU Data by plot, execute in terminal "rqt_plot"
-    pub_imu_roll = rospy.Publisher('IMU_Roll', Float32, queue_size=10)
-    pub_imu_pitch = rospy.Publisher('IMU_Pitch', Float32, queue_size=10)
-    pub_imu_yaw = rospy.Publisher('IMU_Yaw', Float32, queue_size=10)
+    print(incomming_msg)
 
 
     return roll, pitch, yaw
