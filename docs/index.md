@@ -14,7 +14,12 @@
 
 
 ### Importance of R&D
-저희는 비싸고, 다루기 힘든 라이다를 대신 해서 RGB-D (D for depth) 카메라인 Intel Realsense 를 이용하여, 자율 주행 솔류션을 개발하고 있습니다.
+저희는 비싼 라이다를 대신 해서 RGB-D (D for depth) 카메라인 Intel Realsense 를 이용하여, 자율 주행 솔루션을 개발하고 있습니다.
+단순히 라이다의 비용적 측면에서의 개선이 아닌 뎁스 카메라를 이용해서 효율적인 로봇 구동을 위한 기술 개발을 하고 있습니다.
+
+### Mainstream robot operationg method - About easy™ series
+easyGO, easyControl, esayVector, easyDrive 는 All-in-one 파이썬 기반 Turtlebot3 주행 보조 라이브러리입니다.
+
 
 ### About overnight develop (9to9)
 We have very unique and seems counter-productive tradition on this squad. It is called "9to9" it's overnight develop since 9 pm to next morning 9 am, Although it's quiet negative affect on our life on next day. Such as wake up at 9pm instead. But after several 9to9, we had lots of  significant breakthrough on our research.
