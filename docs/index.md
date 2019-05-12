@@ -35,8 +35,8 @@
  - 연구개발의 목표
     - 연구 개발의 최종 목표
         - 실내 자율 주행 로봇 플랫폼 구축
-        - 실내 자율주행 로봇 SW 개발 ([TRL](https://itec.etri.re.kr/itec/sub01/sub01_07.do) : 1 ~ 3)
-        - 실내 자유 주향 센서 통합 방법 연구
+        - 실내 자율주행 로봇 SW 개발 ([TRL](https://itec.etri.re.kr/itec/sub01/sub01_07.do) : 3 ~ 5)
+        - 실내 자율주행 센서 통합 방법 연구
         
  - 핵심 기술 키워드
     - SLAM
@@ -70,7 +70,7 @@ easyGO, easyControl, esayVector, easyDrive 는 All-in-one 파이썬 기반 Turtl
 We have very unique and seems counter-productive tradition on this squad. It is called "9to9" it's overnight develop since 9 pm to next morning 9 am, Although it's quiet negative affect on our life on next day. Such as wake up at 9pm instead. But after several 9to9, we had lots of  significant breakthrough on our research.
 
 ### Develop Schedule
-  1. 19' 1Q (formal 9to9 start since March)
+  1. 19' 1Q (formal 9to9 start since March)<br/>
     __Week 1.__ Setup development environment.<br/>
     __Week 2.__ Ground Segmentation. <br/>
     __Week 3.__ Turtlebot3 Waffle pi Setup for testbed and change platform Computer to Lattepanda Alpha.    <br/>
