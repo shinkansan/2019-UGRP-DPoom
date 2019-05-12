@@ -1,7 +1,8 @@
 2019 DGIST DPoom Project Introduction Page
 ===
 
-2019 DGIST 소형자율주행로봇 플랫폼 구축 및 RGB-D 센서를 이용한 Full Automation 자율 주행 알고리즘 구축
+2019 DGIST 소형자율주행로봇 플랫폼 구축 및 RGB-D 센서를 이용한 Full Automation 자율 주행 알고리즘 구축<br/>
+__뎁스카메라__ 를 이용한 __독립형 완전자율__ 주행
 ---
 
 ## 개발 소개 ![build_status](https://img.shields.io/badge/build-WIP-yellow.svg)
