@@ -1,13 +1,16 @@
 #! /usr/bin/env python
 # TODO IMU Value doesn't retreie~~~~~ fuck fix this out next.....
-
+from time import sleep
+import signal
+import sys
 import rospy
+import cv2
 from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
 from std_msgs.msg import Float32, Float32MultiArray
 from sensor_msgs.msg import Imu
 import easyGo
-global current_Angle
+global current_Angle, last_Angle
 global desired_Angle
 desired_Angle = 45
 current_Angle = desired_Angle
@@ -31,8 +34,12 @@ def imu_callback(msg):
     rate.sleep()
 
 def yaw_callback(msg):
-    print(str(msg) + '\n\n')
-    current_Angle = msg
+    global current_Angle, last_Angle
+    current_Angle = float(str(msg)[6:12])
+    if type(current_Angle) != float:
+        print("GAESSIBAL!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    last_Angle = current_Angle
+    print(type(current_Angle))
     rate.sleep()
 
 
@@ -46,11 +53,24 @@ def twist (msg):
 rospy.init_node('robot_mvs', anonymous=True) # the original name sphero might be the same as other node.
 pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1) #topic publisher that allows you to move the sphero
 #sub_odom = rospy.Subscriber('/odom', Odometry, odom_callback) # the original name odom might be the same as other function.
-sub_imu = rospy.Subscriber('/imu/yaw', Float32, yaw_callback)
-rate = rospy.Rate(10000)
+sub_imu = rospy.Subscriber('/imu_yaw', Float32, yaw_callback)
+rate = rospy.Rate(5000)
 Kp = 1.7375 / 45
+
 while not rospy.is_shutdown():
-    tempInput = (desired_Angle - current_Angle) * Kp
+    cv2.imshow("asdf",0)
+    k = cv2.waitKey(1)
+    if k == ord('k'):
+        easyGo.stop()
+        print('FUCKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK')
+        cv2.waitKey(0)
+        break
+
+    print('cu', current_Angle, 'dr', desired_Angle)
+
+    print(type(current_Angle), type(desired_Angle))
+    
+    tempInput = (float(desired_Angle) - float(current_Angle)) * Kp
     if -1*Magic_Value > tempInput:
         tempInput = -1*Magic_Value
     elif Magic_Value < tempInput:
@@ -61,5 +81,6 @@ while not rospy.is_shutdown():
         print('!!!!!!!!!tempInput 0')                 
     easyGo.mvCurve(1,tempInput)
     rate.sleep()
+    
     
      # Instead of using rospy.spin(), we should use rate.sleep because we are in a loop

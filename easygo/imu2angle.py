@@ -28,7 +28,7 @@ class Imu2Angles:
 
         self.pub_imu_roll = rospy.Publisher('/' + self.imu_name +'/roll', Float32, queue_size=1)
         self.pub_imu_pitch = rospy.Publisher('/' + self.imu_name +'/pitch', Float32, queue_size=1)
-        self.pub_imu_yaw = rospy.Publisher('/' + self.imu_name +'/yaw', Float32, queue_size=1)
+        self.pub_imu_yaw = rospy.Publisher('/imu_yaw', Float32, queue_size=1)
 
         self.sub = rospy.Subscriber(self.topic_name, Imu, self.process_imu_message, queue_size=1)
 
