@@ -11,7 +11,7 @@ Working with
 	numpy
 
 	for intel D435i
-
+font
 '''
 import pyrealsense2 as rs
 import numpy as np
@@ -19,7 +19,7 @@ import cv2
 import matplotlib.pyplot as plt
 import math
 import time
-#import tk.easyGo as easyGo
+import easyGo as easyGo
 
 global depth_scale, ROW, COL
 
@@ -28,8 +28,8 @@ COL= 720
 ROW = 1280
 
 #ROBOT MOVE
-SPEED = 5
-ROTATE_SPEED = 10
+SPEED = 0.8
+ROTATE_SPEED = 15
 
 VERTICAL_CORRECTION = 0.15 #0.45  #parameter of correction for parabola to linear
 WARP_PARAM = 0.45  #value should be 0.0 ~ 1.0. Bigger get more warped. 0.45
@@ -232,7 +232,7 @@ def LaneHandling(virtual_lane_available, unavailable_thres, n):
                 print("GO BACK")
                 return 0
             else:
-                LaneHandling(virtual_lane_available, unavailable_thres, n)
+                return LaneHandling(virtual_lane_available, unavailable_thres, n)
         elif virtual_lane_available[center-n] > unavailable_thres:
             print("TURN RIGHT")
             return 3
@@ -241,7 +241,7 @@ def LaneHandling(virtual_lane_available, unavailable_thres, n):
             return 2
         else:
             n += 1
-            LaneHandling(virtual_lane_available, unavailable_thres, n)
+            return LaneHandling(virtual_lane_available, unavailable_thres, n)
     #Checking where is future obstable and avoid it.
     else:
         if n > center:
@@ -259,19 +259,21 @@ def LaneHandling(virtual_lane_available, unavailable_thres, n):
                 print("GO STRAIGHT")
                 return 1
             else:
-                LaneHandling(virtual_lane_available, unavailable_thres, n)
+                return LaneHandling(virtual_lane_available, unavailable_thres, n)
 
-'''
+
 def GoEasy(direc):
     if direc == 0:
-        easyGo.mvStraight(-SPEED, -1)
+        easyGo.mvCurve(-SPEED, 0)
     elif direc == 1:
-        easyGo.mvStraight(SPEED, -1)
+	print("COME HERE")
+        easyGo.mvCurve(SPEED, 0)
     elif direc == 2:
+	print("COME HERE2")
         easyGo.mvRotate(ROTATE_SPEED, -1, False)
     elif direc == 3:
         easyGo.mvRotate(ROTATE_SPEED, -1, True)
-'''
+
 
 def main():
     # Configure depth and color streams
@@ -325,9 +327,10 @@ def main():
             color_image, virtual_lane_available = GroundSeg(depth_image, color_image)
             # handling lane
             cv2.line(color_image, (0, UNAVAILABLE_THRES), (ROW, UNAVAILABLE_THRES), (0, 255, 0), 2)
-
-            #GoEasy(LaneHandling(virtual_lane_available, UNAVAILABLE_THRES, 1))
-            LaneHandling(virtual_lane_available, UNAVAILABLE_THRES, 1)
+	    direc = LaneHandling(virtual_lane_available, UNAVAILABLE_THRES, 1)
+            print(direc)
+	    GoEasy(direc)
+            #LaneHandling(virtual_lane_available, UNAVAILABLE_THRES, 1)
 
             # Stack both images horizontally
             # images = np.hstack((color_image, depth_colormap))
@@ -335,7 +338,9 @@ def main():
             # Show images
             cv2.namedWindow('RealSense', cv2.WINDOW_AUTOSIZE)
             cv2.imshow('RealSense', color_image)
-            cv2.waitKey(1)
+            if cv2.waitKey(1) == 27: #esc
+		easyGo.stop()
+		break
 
             # FPS
             numFrame += 1
