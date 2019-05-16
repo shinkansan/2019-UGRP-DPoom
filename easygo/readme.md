@@ -102,12 +102,24 @@ if angle=-1, turn CW/CCW continuously</br>
 
 
 ### Forward/Backward
-```bash
+```python
 easyGo.mvStraight(speed, angle, verbose=0)
 #Stop All Vector (x,y,z)
 ```
 angle = -1 is for inf go, the example code is below
 
+
+### Curve with linear, angular Value
+#### __mvCurve__
+```Python
+easyGo.mvCurve(speed, steer)
+#speed for linear velocity {negatives for reverse, positives for forward (float)}
+#steer for float value for angular speed
+```
+_you can check the example of this func by easyVector section_
+
+
+```
 
 ### function example
 ```bash
@@ -161,3 +173,31 @@ it should be working which keyCap.py
   c : speed down by 0.2</br>
 
 Any keyevent which is not on the above is for e-stop
+
+
+
+# easyVector ![build badge](https://img.shields.io/badge/Version-beta-yellow.svg)
+go to source [./easyVector.py](./easyVector.py)
+easyVector is IMU Based Steer Assistant solution
+
+it can be run by standalone or run by import<br/>
+> __IMPORTANT!!__ <br/>
+If you wanna run it by import
+you must Initialize ros node top of your code <br/>
+```python
+import rospy
+rospy.init_node('robot_mvs', anonymous=True)
+```
+
+  After that just implement easyVector by ```import easyVector```
+
+## Usage
+```python
+easyVector.main(desired_angle)
+```
+and this command returns steer value for ```easyGo.mvCurve(speed, steer)```
+
+
+# imu2angle ![build badge](https://img.shields.io/badge/build-passing-green.svg)
+
+imu Yaw value to 'imu_raw' topics on ROSPY

@@ -23,7 +23,7 @@ import imu2angle
 
 global current_Angle, last_Angle
 global desired_Angle
-desired_Angle = 45 # for init working
+desired_Angle = 65 # for init working
 current_Angle = desired_Angle
 Magic_Value = 1.7375 #Value for pin-point turn
 
@@ -48,11 +48,13 @@ def imu_callback(msg):
     rate.sleep()
 
 def yaw_callback(msg):
+    #rospy.init_node('robot_mvs', anonymous=True)
+    rate = rospy.Rate(5000)
     global current_Angle, last_Angle
     current_Angle = float(str(msg)[6:12])
     if type(current_Angle) != float:
         #print("")
-    last_Angle = current_Angle
+        last_Angle = current_Angle
     #print(type(current_Angle))
     rate.sleep()
 
@@ -64,21 +66,33 @@ def twist (msg):
     sub=rospy.Subscriber('cmd_vel', Twist, twist)
 
 def imuThread():
+    print('Worker On')
     try:
-        imu2angle.Imu2Angles()
+        imu2angle.init()
     except:
         pass
+
+
+print('[easyVector INIT]')
+#rospy.init_node('robot_mvs', anonymous=True)
+
+
+#rate = rospy.Rate(5000)
 
 if __name__ == '__main__':
     #================ Publisher & ROS Init =============================
     rospy.init_node('robot_mvs', anonymous=True) # the original name sphero might be the same as other node.
-
-    pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1) #topic publisher that allows you to move the sphero
-    #sub_odom = rospy.Subscriber('/odom', Odometry, odom_callback) # the original name odom might be the same as other function.
+    th = threading.Thread(target=imuThread, name="imuthread")
+    th.setDaemon(True)
+    th.start()
+    pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
     sub_imu = rospy.Subscriber('/imu_yaw', Float32, yaw_callback)
-    rate = rospy.Rate(5000)
+     #topic publisher that allows you to move the sphero
+    #sub_odom = rospy.Subscriber('/odom', Odometry, odom_callback) # the original name odom might be the same as other function.
+    #sub_imu = rospy.Subscriber('/imu_yaw', Float32, yaw_callback)
+    
     Kp = 1.7375 / 45
-
+    rate = rospy.Rate(5000)
     while not rospy.is_shutdown():
         cv2.imshow("windows",0)
         k = cv2.waitKey(1)
@@ -94,26 +108,31 @@ if __name__ == '__main__':
         if abs(steer) <= 0.08:
             steer = 0
             print('Reach at Desired Angle')                 
-        easyGo.mvCurve(1,steer)
+        easyGo.mvCurve(0.5,steer)
         rate.sleep()
     
         # Instead of using rospy.spin(), we should use rate.sleep because we are in a loop
 
 else: #For Dependent Running
+    pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
+    sub_imu = rospy.Subscriber('/imu_yaw', Float32, yaw_callback)
+    th = threading.Thread(target=imuThread, name="imuthread")
+    th.setDaemon(True)
+    th.start()
+    
+
     pass
 
-print('[easyVector INIT]')
-rospy.init_node('robot_mvs', anonymous=True)
-th = threading.Thread(target=imuThread, name="imuthread")
-th.setDaemon(True)
-th.start()
-sub_imu = rospy.Subscriber('/imu_yaw', Float32, yaw_callback)
 
 
 
-def main(speed=1, desiredAngle):
-    rate = rospy.Rate(5000) #Change if reaction time is slow
+
+def main(desiredAngle, speed=1):
+    #rospy.init_node('robot_mvs', anonymous=True)
+    rate = rospy.Rate(5000)
+    #rate.sleep() #Change if reaction time is slow
     Kp = 1.7375 / 45
+    print(current_Angle)
     steer = (float(desiredAngle) - float(current_Angle)) * Kp
     if -1*Magic_Value > steer:
         steer = -1*Magic_Value

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import rospy
+import rospy as _rospy
 import math
 import numpy as np
 
@@ -14,9 +14,10 @@ degrees2rad = math.pi / 180.0
 
 class Imu2Angles:
     def __init__(self):
-        self.rate = rospy.get_param('~rate', 100.0)
-        self.imu_name = rospy.get_param('~imu_name', 'imu')
-        self.topic_name = rospy.get_param('~topic_name', 'imu')
+
+        self.rate = _rospy.get_param('~rate', 2000.0)
+        self.imu_name = _rospy.get_param('~imu_name', 'imu')
+        self.topic_name = _rospy.get_param('~topic_name', 'imu')
 
         self.roll = 0.0
         self.pitch = 0.0
@@ -26,15 +27,15 @@ class Imu2Angles:
         self.pub_imu_pitch_msg = Float32()
         self.pub_imu_yaw_msg = Float32()
 
-        self.pub_imu_roll = rospy.Publisher('/' + self.imu_name +'/roll', Float32, queue_size=1)
-        self.pub_imu_pitch = rospy.Publisher('/' + self.imu_name +'/pitch', Float32, queue_size=1)
-        self.pub_imu_yaw = rospy.Publisher('/imu_yaw', Float32, queue_size=1)
+        self.pub_imu_roll = _rospy.Publisher('/' + self.imu_name +'/roll', Float32, queue_size=1)
+        self.pub_imu_pitch = _rospy.Publisher('/' + self.imu_name +'/pitch', Float32, queue_size=1)
+        self.pub_imu_yaw = _rospy.Publisher('/imu_yaw', Float32, queue_size=1)
 
-        self.sub = rospy.Subscriber(self.topic_name, Imu, self.process_imu_message, queue_size=1)
+        self.sub = _rospy.Subscriber(self.topic_name, Imu, self.process_imu_message, queue_size=1)
 
-        rate = rospy.Rate(self.rate)
-	rospy.spin()
-        while not rospy.is_shutdown():
+        rate = _rospy.Rate(self.rate)
+	_rospy.spin()
+        while not _rospy.is_shutdown():
 
             rate.sleep()
 
@@ -70,7 +71,14 @@ class Imu2Angles:
 # Main function.
 if __name__ == '__main__':
     # Initialize the node and name it.
-    rospy.init_node('robot_mvs', anonymous=True)
+    _rospy.init_node('robot_mvs', anonymous=True)
+
+    try:
+        obj = Imu2Angles()
+    except:
+        pass
+
+def init():
 
     try:
         obj = Imu2Angles()
