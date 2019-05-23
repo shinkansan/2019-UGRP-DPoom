@@ -178,7 +178,7 @@ Any keyevent which is not on the above is for e-stop
 
 # easyVector ![build badge](https://img.shields.io/badge/Version-beta-yellow.svg)
 go to source [./easyVector.py](./easyVector.py)
-easyVector is IMU Based Steer Assistant solution
+easyVector is IMU Based Steer Assistant solution and Odom Pose X Y Provider
 
 it can be run by standalone or run by import<br/>
 > __IMPORTANT!!__ <br/>
@@ -191,12 +191,14 @@ rospy.init_node('robot_mvs', anonymous=True)
 
   After that just implement easyVector by ```import easyVector```
 
-## Usage
+## Usage, Steer Value
 ```python
-easyVector.main(desired_angle)
-```
-and this command returns steer value for ```easyGo.mvCurve(speed, steer)```
+easyVector.get_steer_Value(desired_angle)
 
+easyVector.get_poseXY()
+```
+and this ```get_steer_Value(@params)``` returns steer value for ```easyGo.mvCurve(speed, steer)``` <br/>
+```get_poseXY()``` returns PoseXY as tuple (poseX, poseY) in meter
 
 # imu2angle ![build badge](https://img.shields.io/badge/build-passing-green.svg)
 
