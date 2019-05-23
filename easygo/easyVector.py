@@ -7,9 +7,6 @@
 # REMARK : easyVector must be loaded on high hierachy procedure
 # Dependencies : imu2angle
 # 0517 0444 : add thread, heierachy add
-# 0524 Pose ODOM ADDED, variable Name : PoseX, PoseY
-# 	Chagle main() to get_steer_Value(desiredAngle, speed=1)
-#	
 from time import sleep
 import signal
 import sys
@@ -30,17 +27,16 @@ desired_Angle = 65 # for init working
 current_Angle = desired_Angle
 Magic_Value = 1.7375 #Value for pin-point turn
 
-global PoseX
-global PoseY
-PoseX, PoseY = 0, 0
+
 
 def odom_callback(msg):
-    global PoseX
-    global PoseY
-    PoseX = float(msg.pose.pose.position.x)
-    PoseY = float(msg.pose.pose.position.y)
-    #print(PoseX, PoseY)
-    rate = rospy.Rate(5000)
+    # go = Odometry() is not needed
+    print "------------------------------------------------"
+    print "pose x = " + str(msg.pose.pose.position.x)
+    print "pose y = " + str(msg.pose.pose.position.y)
+    print "orientacion x = " + str(msg.pose.pose.orientation.x)
+    print "orientacion y = " + str(msg.pose.pose.orientation.y)
+    rate.sleep()
 
 def imu_callback(msg):
     # allez = Imu()
@@ -91,7 +87,6 @@ if __name__ == '__main__':
     th.start()
     pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
     sub_imu = rospy.Subscriber('/imu_yaw', Float32, yaw_callback)
-    odom_sub = rospy.Subscriber('odom', Odometry, odom_callback)
      #topic publisher that allows you to move the sphero
     #sub_odom = rospy.Subscriber('/odom', Odometry, odom_callback) # the original name odom might be the same as other function.
     #sub_imu = rospy.Subscriber('/imu_yaw', Float32, yaw_callback)
@@ -119,10 +114,8 @@ if __name__ == '__main__':
         # Instead of using rospy.spin(), we should use rate.sleep because we are in a loop
 
 else: #For Dependent Running
-    
     pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
     sub_imu = rospy.Subscriber('/imu_yaw', Float32, yaw_callback)
-    odom_sub = rospy.Subscriber('odom', Odometry, odom_callback)
     th = threading.Thread(target=imuThread, name="imuthread")
     th.setDaemon(True)
     th.start()
@@ -131,18 +124,13 @@ else: #For Dependent Running
     pass
 
 
-def get_poseXY():
-    rate = rospy.Rate(5000)
-    global PoseX
-    global PoseY
-    return (PoseX, PoseY)
 
 
-def get_steer_Value(desiredAngle, speed=1):
+
+def main(desiredAngle, speed=1):
     #rospy.init_node('robot_mvs', anonymous=True)
     rate = rospy.Rate(5000)
-    #rate.sleep() #Change if reaction time is slowReach at Desired Angle
-
+    #rate.sleep() #Change if reaction time is slow
     Kp = 1.7375 / 45
     print(current_Angle)
     steer = (float(desiredAngle) - float(current_Angle)) * Kp
