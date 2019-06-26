@@ -85,4 +85,4 @@ We have very unique and seems counter-productive tradition on this squad. It is 
     __Week 3.__ Turtlebot3 Waffle pi Setup for testbed and change platform Computer to Lattepanda Alpha.    <br/>
 
 ### Acknowledgement
-This research is funded by <br/> DGIST Undergraduate Research Program (grants number : ugrp-21)<br/> SAMSUNG Research IRP (grants number : )
+This research is funded by <br/> DGIST Undergraduate Group Research Program 
