@@ -27,6 +27,7 @@ $ roslaunch realsense2_camera tk_rosbag_realsense_for_mapping.launch
 You can record your rosbag file by run scripts below:
 
 ```bash
+$ rosparam set use_sim_time false
 $ rosbag record -O my_bagfile_1.bag /camera/aligned_depth_to_color/camera_info  camera/aligned_depth_to_color/image_raw /camera/color/camera_info /camera/color/image_raw /camera/imu /camera/imu_info /tf_static
 ```
 You can also change name of the rosbag file by changing 'my_bagfile_1.bag'. It must includes all the topics above to run rtabmap.
@@ -50,6 +51,8 @@ topics:      /camera/aligned_depth_to_color/camera_info     4057 msgs    : senso
 
 ## Run your rosbag file
 ```bash
+roscore >/dev/null 2>&1 &
+rosparam set use_sim_time true
 rosbag play my_bagfile_1.bag --clock
 ```
 After play rosbag file, run scripts below to start __'rtabmap'__ to listen topics from your rosbag file, to perform mapping.
