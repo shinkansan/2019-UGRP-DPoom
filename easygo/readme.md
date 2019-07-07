@@ -118,11 +118,11 @@ easyGo.mvCurve(speed, steer)
 ```
 _you can check the example of this func by easyVector section_
 
-
-```
-
 ### function example
-```bash
+```python
+
+
+
 if __name__ == '__main__':
     try:
         rospy.init_node('robot_goForward', anonymous=True)
@@ -146,8 +146,9 @@ if __name__ == '__main__':
             t1 = rospy.Time.now().to_sec()
             if t1-t0 > 10:
                 break
-        stop()        
-        '''
+        stop()
+        '''       
+
 
 
     except rospy.ROSInterruptException:
@@ -177,7 +178,7 @@ Any keyevent which is not on the above is for e-stop
 
 
 # easyVector ![build badge](https://img.shields.io/badge/Version-beta-yellow.svg)
-go to source [./easyVector.py](./easyVector.py)
+go to source [./easyVector.py](./easyVector.py)<br/>
 easyVector is IMU Based Steer Assistant solution and Odom Pose X Y Provider
 
 it can be run by standalone or run by import<br/>
@@ -203,3 +204,12 @@ and this ```get_steer_Value(@params)``` returns steer value for ```easyGo.mvCurv
 # imu2angle ![build badge](https://img.shields.io/badge/build-passing-green.svg)
 
 imu Yaw value to 'imu_raw' topics on ROSPY
+
+
+# dap (drive along path) ![build badge](https://img.shields.io/badge/Version-beta-yellow.svg)
+
+go to source [./dap.py](./dap.py)<br/>
+dap let DPoom drive along given path
+
+it can be run by standalone or run as library (path & Robot_speed are required)
+it should run with easySeries
