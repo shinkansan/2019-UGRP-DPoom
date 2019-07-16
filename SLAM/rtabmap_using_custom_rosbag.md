@@ -4,7 +4,7 @@ __I strongly do not recommend to record a custom rosbag file to test rtabmap !!!
 ## Publish topics of D435i
 I made a custom launch file to publish essential topics of realsense camera D435i, named __'tk_rosbag_realsense_for_mapping.launch'.__ You must run this launch file before record custom rosbag file. 
 
-Source: [tk_rosbag_realsense_for_mapping.launch](tk_rosbag_realsense_for_mapping.launch) .
+Source: [launch/tk_rosbag_realsense_for_mapping.launch](launch/tk_rosbag_realsense_for_mapping.launch) .
 
 ```bash
 $ roslaunch realsense2_camera tk_rosbag_realsense_for_mapping.launch
@@ -116,7 +116,7 @@ I changed the important parameters above in 'opensource_tracking.launch' file. C
     <arg name="rviz" value="true"/>
 	</include>
 ```
-Source file are uploaded here: [opensource_tracking_tk_parameter_2.launch](opensource_tracking_tk_parameter_2.launch)
+Source file are uploaded here: [launch/opensource_tracking_tk_parameter_2.launch](launch/opensource_tracking_tk_parameter_2.launch)
 
 # Run rtabmap to SLAM with D435i
 The instructions referenced this site: https://github.com/IntelRealSense/realsense-ros/wiki/SLAM-with-D435i
