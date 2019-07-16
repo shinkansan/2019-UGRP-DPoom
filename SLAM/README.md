@@ -26,7 +26,8 @@ $ roslaunch realsense2_camera opensource_tracking_tk_online.launch
 ```
 You should download my launch file [launch/opensource_tracking_tk_online.launch](launch/opensource_tracking_tk_online.launch), and locate it in '/catkin_ws/src/realsense-ros/realsense2_camera/launch' directory. rtabmap will be launched and you can perform mapping by dragging D435i with your labtop. 
 
-<img src="/gif/rtabmap.gif" alt="drawing" width="480"/>
+<img src="/GIF/rtabmap.gif" alt="drawing" width="480"/>
+<img src="/GIF/rtabmap_mapping.gif" alt="drawing" width="480"/>
 
 I recommend to use 'rtabmapviz', as in my launch file. If you want to use 'rviz' to visualize, just change two parameters in the launch file.
 ```bash
@@ -37,7 +38,7 @@ I recommend to use 'rtabmapviz', as in my launch file. If you want to use 'rviz'
 ## Loop Closure
 rtabmap will perform loop closure automatically. 
 
-<img src="gif/rtabmap_loop_closure.gif" alt="drawing" width="480"/>
+<img src="/GIF/rtabmap_loop_closure.gif" alt="drawing" width="480"/>
 
 ## Save Map Data
 You can save your map data in pcd file while rtabmap is still running.
