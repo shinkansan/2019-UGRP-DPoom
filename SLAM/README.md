@@ -62,7 +62,7 @@ $ rosrun realsense2_camera opensource_tracking_tk_localization.launch
 ```
 The source is here [launch/opensource_tracking_tk_localizationl.launch](launch/opensource_tracking_tk_localizationl.launch) and you should put it to the ros package too.
 
-<img src="gif/rtabmap_localization.gif" alt="drawing" width="480"/>
+<img src="/GIF/rtabmap_localization.gif" alt="drawing" width="480"/>
 
 # Post-processing Position Data from Matching
 to be updated
