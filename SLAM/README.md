@@ -65,4 +65,16 @@ The source is here [launch/opensource_tracking_tk_localizationl.launch](launch/o
 <img src="/GIF/rtabmap_localization.gif" alt="drawing" width="480"/>
 
 # Post-processing Position Data from Matching
-to be updated
+## odom_listener
+The odometry data is published as name of '/rtabmap/odom' while rtabmap localization is running. It contains data as below:
+
+<img src="/img/rtabmap_odom.png" alt="drawing" width="320"/>
+
+__Since our path planning and driving modules (easySeries) requires (x,y) position of the robot, [odom_listener.py](odom_listener.py) is made for subscribing '/rtabmap/odom' and parsing it to position data.__ And I plot its trajactory using matplotlib.
+
+<p>
+  <img src="/img/odom_listener_plot.png" alt="drawing" width="320"/>
+  <img src="/img/E5-223_2D.png" alt="drawing" width="320"/>
+</p>
+
+The left image is the result of traveling in my office while running pure localization of rtabmap. The right image is the 2D projection of created map. You can see that odometry provides really accurate position data. The position data describes relative location from the origin, and the unit is meter. As result of comparision, error of the data is just few centimeters. 
