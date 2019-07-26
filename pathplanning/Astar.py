@@ -19,14 +19,19 @@ class Node():
     def __eq__(self, other):
         return self.position == other.position
 
+
+
+
 def discost(maze, x, y):
     """Calculate the distance cost according to neighbor obstacles"""
     """Suspecting 8 neighbors, distance cost is increased by the number of nearing obstacles"""
     distance_cost = 0
     for new_position in [(0, -1), (0, 1), (-1, 0), (1, 0), (-1, -1), (-1, 1), (1, -1), (1, 1)]:
         node_position = (x + new_position[0], y + new_position[1])
-        if maze[node_position[0]][node_position[1]] == 0:
-            distance_cost+=1
+        if maze[node_position[0]][node_position[1]] == 1:
+            distance_cost += 30   # 30 is heuristic value obtained by experiments
+            break
+
     return distance_cost
 
 
@@ -106,7 +111,7 @@ def astar(maze, start, end):
             child.g = current_node.g + 1
             child.h = ((child.position[0] - end_node.position[0]) ** 2) + ((child.position[1] - end_node.position[1]) ** 2)
             # New cost 'distance cost' as dc
-            child.dc = -100*discost(maze, child.position[0], child.position[1])
+            child.dc = discost(maze, child.position[0], child.position[1])
             child.f = child.g + child.h + child.dc
             # Child is already in the open list
             for open_node in open_list:
@@ -114,7 +119,6 @@ def astar(maze, start, end):
                     continue
 
             # Add the child to the open list
-            print(child.f)
             open_list.append(child)
 
 
@@ -141,22 +145,20 @@ def main():
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
 
-    start = (0, 0)
-    end = (10, 18)
+    start = (2, 5)
+    end = (17, 17)
 
     path = astar(maze, start, end)
-    print(path)
     showmaze = np.array(maze).astype(np.uint8)
 
 
     showmaze*=255
     for colorpath in path:
         showmaze[colorpath[0]][colorpath[1]] = 50
-    print(showmaze)
+    #print(showmaze)
     showmaze[start[0]][start[1]]=180
     showmaze[end[0]][end[1]]=180
 
-    print(discost(maze, 10, 10))
     #print(showmaze.shape)
     showmaze = cv2.resize(showmaze, None, fx=30, fy=30, interpolation=cv2.INTER_NEAREST)
     cv2.imshow('Sample A* algorithm run', showmaze)
