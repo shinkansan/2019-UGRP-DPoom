@@ -206,10 +206,65 @@ and this ```get_steer_Value(@params)``` returns steer value for ```easyGo.mvCurv
 imu Yaw value to 'imu_raw' topics on ROSPY
 
 
-# dap (drive along path) ![build badge](https://img.shields.io/badge/Version-beta-yellow.svg)
+
+# DAP (Drive Along Path) ![build badge](https://img.shields.io/badge/Version-beta-yellow.svg)
+
 
 go to source [./dap.py](./dap.py)<br/>
 dap let DPoom drive along given path
 
 it can be run by standalone or run as library (path & Robot_speed are required)
 it should run with easySeries
+
+
+you can import this by
+
+```python
+#if your py file and dap file in same dir
+import dap
+```
+
+## Dependency
+```python
+import rospy
+import easyGo
+import easyVector
+import math
+import matplotlib.pyplot as plt
+import cv2 # if you want to see visualized steer value(show what direction should DPoom head to)
+```
+
+
+## Main functions
+#### 1. Steer_Visualization
+```python
+dap.Steer_Visualization(desired_steer):
+#desired_steer is a steer value DPoom should have to reach target location.
+```
+<br/>
+<img src="../easygo/steering_wheel_image.jpg.png" alt="drawing" width="240"/>
+<br/>
+
+
+
+This wheel image will show you how should DPoom aim direction to reach the desired point of the given path. __This image should be placed in same dir__.<br/>
+dap.py is beta version now. To run this code, call function __easy_test__. This code will be replaced with other code which combine the code with MORP.<br/><br/>
+
+#### __easy_test__
+For simple checking whether DPoom move along given path under non_MORP condition.
+```python
+dap.easy_test(path, velRobot)
+#path should be given in 2D array with real numbers, [0] : x, [1] : y coordinates
+#velRobot is linear speed [m/s]
+```
+
+* This function only exists during beta version.
+
+#### __easy_drive__
+```python
+dap.easy_drive(goal_x, goal_y, realposition, velRobot)
+#goal_x, goal_y is a coordinate of target
+#realposition is a coordinate of present position of DPoom. Given by ordered pair
+#velRobot is linear speed [m/s]
+```
+

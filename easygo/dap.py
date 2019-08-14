@@ -10,82 +10,96 @@ import cv2
 steer = cv2.imread('steering_wheel_image.jpg.png', 0)
 rows, cols = steer.shape
 
-
 #######################################################
 ###########Sample Value for Test!!!!!##################
-def get_pathlist():
-    return [[0, 0, 0, 0.5, 1, 1, 1, 0.5, 0, 0, 0, 0.5, 1, 1, 1, 0.5, 0],
-            [0, 0.5, 1, 1, 1, 0.5, 0, 0, 0, 0.5, 1, 1, 1, 0.5, 0, 0, 0]]
 FlagMORP = False
 threshold_boundary = 0.2
-Robot_speed = 0.1
-x_positions=[]
-y_positions=[]
 start_position = (0, 0)
+PI = 3.1415926535897
 #######################################################
 #######################################################
 
-def easy_test(path):
-    global start_position
-    while(True):
-        if len(path)==0 or FlagMORP:
-            global start_position
-            path = get_pathlist()
-            i = 1
-            while(True):
-                start_position = easyVector.get_poseXY()[:]   #### x == forward
-                if start_position != (0,0):
-                    break
-
-        current_position = (-(easyVector.get_poseXY()[1] - start_position[1]), easyVector.get_poseXY()[0] - start_position[0])   #(x, y)
-        print('current_position :', current_position)
-        #cv2.waitKey(0)
-        #x_positions.append(current_position[0])
-        #y_positions.append(current_position[1])
-        if i == len(path[0]):
-            print('Goal!')
-            easyGo.stop()
-            break
-        else:
-            if (path[0][i]-current_position[0])**2 + (path[1][i]-current_position[1])**2 < threshold_boundary**2:
-                i = i+1
-            print('i:', i)
-            easy_drive(path[0][i], path[1][i], current_position)
-
-
-#############################################################################
-
-
-def easy_drive(goal_x, goal_y, realposition):  #realposition == current_position(x, y)
-    Kp = 1.7375 / 45
-    current_angle = easyVector.get_angle()
-    print('current_angle :', current_angle)
-    if goal_y>=0 :
-        desired_angle = -math.atan2(goal_x-realposition[0], goal_y-realposition[1])*180/3.1415926535897
-        print('desired_angle :', desired_angle)   ##y_axis == 0 degree
-        desired_steer = easyVector.get_steer_Value(desired_angle, Robot_speed)
-    else :
-        if goal_x>=0:
-            desired_angle = -180-math.atan2(goal_x-realposition[0], goal_y-realposition[1])*180/3.1415926535897
-            print('desired_angle :', desired_angle)   ##y_axis == 0 degree
-            desired_steer = easyVector.get_steer_Value(desired_angle, Robot_speed)
-        else:
-            desired_angle = 180-math.atan2(goal_x-realposition[0], goal_y-realposition[1])*180/3.1415926535897
-            print('desired_angle :', desired_angle)   ##y_axis == 0 degree
-            desired_steer = easyVector.get_steer_Value(desired_angle, Robot_speed)
-
-    #######
-    easyGo.mvCurve(Robot_speed, desired_steer)
+def Steer_Visualization(desired_steer):     #steer visualization
     M = cv2.getRotationMatrix2D((cols / 2, rows / 2), desired_steer*20, 1)
     dst = cv2.warpAffine(steer, M, (cols, rows))
     cv2.imshow("steering wheel", dst)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         easyGo.stop()
         input()
-    #easyGo.mvCurve(Robot_speed,0.2)  ##If steer is positive, CCW
+
+def easy_test(path, velRobot):     # path is 2D array (x, y)
+    global start_position
+    i=0
+    while(True):
+        if i==0 or FlagMORP:     # when just running code or we should search new
+                                # path(by MORP algorithm)
+            while(True):     # at first time, get_poseXY() == (0, 0)
+                start_position = easyVector.get_poseXY()[:]   # x axis == forward
+                if start_position != (0,0):
+                    break
+        current_position = (-(easyVector.get_poseXY()[1] - start_position[1]),
+                                easyVector.get_poseXY()[0] - start_position[0])
+        #(x, y) when DPoom head to right, x decreases (negatively increases)
+        print('current_position :', current_position)
+        if (path[0][i]-current_position[0])**2 + (path[1][i]-current_position[1])**2 < threshold_boundary**2:
+            i = i+1
+            if i == len(path[0]):
+                print('Goal!')
+                easyGo.stop()
+                break
+        print('i:', i)
+        easy_drive(path[0][i], path[1][i], current_position, velRobot)
+
+#############################################################################
+
+def easy_drive(goal_x, goal_y, realposition, velRobot):  #realposition == current_position(x, y)
+    Kp = 1.7375 / 10
+    current_angle = easyVector.get_angle()    ##y_axis == 0 degree, CW -> 0 ~ +180 degree
+    print('current_angle :', current_angle)
+    if goal_y-realposition[1]>=0 :   # pi/2 <= desired_angle <= pi/2
+        desired_angle = -math.atan2(goal_x-realposition[0],
+                                            goal_y-realposition[1])*180/PI
+        print('desired_angle :', desired_angle)
+        desired_steer = easyVector.get_steer_Value(desired_angle, velRobot)
+    else :   #abs(desired_angle) >= pi/2
+        desired_angle = -math.atan2(goal_x-realposition[0],
+                                            goal_y-realposition[1])*180/PI
+        print('desired_angle :', desired_angle)
+        desired_steer = easyVector.get_steer_Value(desired_angle, velRobot)
+    easyGo.mvCurve(velRobot, desired_steer)
+
+    ###############Steer visualization###############
+    Steer_Visualization(desired_steer)
+    ################################################
 
 if __name__ == '__main__':
-    start_path=[]
-    easy_test(start_path)
+    #S
+    '''
+    test_path=[[0, 0.25, 0.37155, 0.37155, 0.25, 0, -0.25, -0.37155, -0.37155, -0.25, 0, 0, 0, 0],
+            [0, 0.60622, 1.29558, 1.99558, 2.68495, 3.29117, 3.89738, 4.58675, 5.28675, 5.97612, 6.58233, 7.28233, 7.98233, 8.68233]]
+    '''
+    #star
+    '''
+    test_path = [[0, -0.3333, -0.5, -0.7, -1,
+    -0.5, 0, 0.5, 0.9, 1.2,
+    0.8, 0.3333, -0.3333, -0.8, -1.2,
+    -0.8, -0.5,  0, 0.5, 1,
+    0.7, 0.5, 0.3333, 0],
+    [0, -0.6667, -1.0909, -1.5, -2,
+    -1.6535, -1.3030, -1.0909, -0.9, -0.6757,
+     -0.6667, -0.6667, -0.6667, -0.6667, -0.6667,
+     -0.9, -1.0909, -1.3030, -1.6535, -2,
+     -1.5, -1.0909, -0.6667, 0]]
+     '''
+    #rectangle
+    '''
+    test_path=[[0, 0, 0, 0.5, 1, 1, 1, 0.5, 0, 0, 0, 0.5, 1, 1, 1, 0.5, 0],
+    [0, 0.5, 1, 1, 1, 0.5, 0, 0, 0, 0.5, 1, 1, 1, 0.5, 0, 0, 0]]
+    '''
+    #randomly
 
-    pipeline.stop()
+    test_path=[[0, 0.5, 1, 0.7, 0, -0.2, -0.5, 0.5],
+    [0, 1.2, 0.5, 0.8, 0.6, 1.3, 0.8, 1.5]]
+
+    velRobot = 0.1
+    easy_test(test_path, velRobot)
