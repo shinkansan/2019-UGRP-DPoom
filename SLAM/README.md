@@ -6,6 +6,18 @@ http://wiki.ros.org/kinetic/Installation/Ubuntu
 ## Realsense
 https://github.com/IntelRealSense/realsense-ros (install step 1 for debian is the easiest)
 
+(if error occurs, check below)
+> If you met catkin_make error related to 'ddynamic' : 
+> ```bash
+> sudo apt-get update
+> sudo apt-get install ros-kinetic-ddynamic-reconfigure
+> (then catkin_make again)
+> ```
+>
+> If you met 'no key' error related to ros, see this link :
+>
+> https://answers.ros.org/question/325039/apt-update-fails-cannot-install-pkgs-key-not-working/
+
 ## Realsense-ros packages include rtabmap
 https://github.com/IntelRealSense/realsense-ros/wiki/SLAM-with-D435i
 
