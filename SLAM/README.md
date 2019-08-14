@@ -4,8 +4,7 @@
 http://wiki.ros.org/kinetic/Installation/Ubuntu
 
 ## Realsense
-https://github.com/IntelRealSense/realsense-ros
-https://github.com/IntelRealSense/librealsense/blob/master/doc/installation.md
+https://github.com/IntelRealSense/realsense-ros (install step 1 for debian is the easiest)
 
 ## Realsense-ros packages include rtabmap
 https://github.com/IntelRealSense/realsense-ros/wiki/SLAM-with-D435i
