@@ -206,13 +206,16 @@ and this ```get_steer_Value(@params)``` returns steer value for ```easyGo.mvCurv
 imu Yaw value to 'imu_raw' topics on ROSPY
 
 
+
 # DAP (Drive Along Path) ![build badge](https://img.shields.io/badge/Version-beta-yellow.svg)
+
 
 go to source [./dap.py](./dap.py)<br/>
 dap let DPoom drive along given path
 
 it can be run by standalone or run as library (path & Robot_speed are required)
 it should run with easySeries
+
 
 you can import this by
 
@@ -264,3 +267,4 @@ dap.easy_drive(goal_x, goal_y, realposition, velRobot)
 #realposition is a coordinate of present position of DPoom. Given by ordered pair
 #velRobot is linear speed [m/s]
 ```
+

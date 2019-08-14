@@ -157,7 +157,9 @@ if __name__ == '__main__':
     #sub_odom = rospy.Subscriber('/odom', Odometry, odom_callback) # the original name odom might be the same as other function.
     #sub_imu = rospy.Subscriber('/imu_yaw', Float32, yaw_callback)
 
+
     Kp = 1.7375 / 10
+
     rate = rospy.Rate(5000)
     while not rospy.is_shutdown():
         cv2.imshow("windows",0)
@@ -167,11 +169,13 @@ if __name__ == '__main__':
             print('STOP')
             cv2.waitKey(0)
 
+
         #steer = (float(desired_Angle) - float(current_Angle)) * Kp
         ####################################
         print('current_Angle :', float(current_Angle))
         ####################################
         '''
+
         if -1*Magic_Value > steer:
             steer = -1*Magic_Value
         elif Magic_Value < steer:

@@ -34,7 +34,7 @@ ROTATE_SPEED = 15
 VERTICAL_CORRECTION = 0.15 #0.45  #parameter of correction for parabola to linear
 WARP_PARAM = 0.45  #value should be 0.0 ~ 1.0. Bigger get more warped. 0.45
 GRN_ROI = 300 #The index of col that want to consider as ground ROI 400
-ZOOM_PARAM = 0.15 #Force calibrating the depth image to match the color image 0.15
+ZOOM_PARAM = 0.205 #Force calibrating the depth image to match the color image 0.15
 UNAVAILABLE_THRES = 450 #The index of col that is threshold of unavailable virtual lane
 ROBOT_WIDTH_LIST = [2,3,4,5]
 ROBOT_LEFT = 1
@@ -184,8 +184,8 @@ def verticalGround(depth_image2, images, numCol, plot):
 
 def preGroundSeg(depth_image, color_image):
     global ROW, COL, GRN_ROI
-    # Force calibrating the depth image to match the color image. Interpolation is really important. DO NOT USE INTER_LINEAR. IT MAKES NOISES!!!!
-    depth_image = cv2.resize(depth_image[(int)(COL * ZOOM_PARAM):(int)(COL * (1 - ZOOM_PARAM)), 0:ROW],
+        # Force calibrating the depth image to match the color image. Interpolation is really important. DO NOT USE INTER_LINEAR. IT MAKES NOISES!!!!
+    depth_image = cv2.resize(depth_image[(int)(COL * ZOOM_PARAM):(int)(COL * (1 - ZOOM_PARAM)), (int)(ROW * ZOOM_PARAM):(int)(ROW * (1 - ZOOM_PARAM))],
                              dsize=(ROW, COL), interpolation=cv2.INTER_NEAREST)
 
     # ROI image

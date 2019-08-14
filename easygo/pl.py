@@ -8,6 +8,7 @@ import numpy as np
 import math
 
 fig, ax = plt.subplots()
+
 #S
 
 '''
@@ -38,12 +39,15 @@ x=[0, 0.5, 1, 0.7, 0, -0.2, -0.5, 0.5]
 y=[0, 1.2, 0.5, 0.8, 0.6, 1.3, 0.8, 1.5]
 
 
+
 threshold_boundary = 0.2   #0.14
 
 plt.scatter(x, y, color = 'b')
 plt.hold(True)
+
 plt.xlim(-1, 1.3)
 plt.ylim(0, 2)
+
 plt.hold(True)
 
 while(True):

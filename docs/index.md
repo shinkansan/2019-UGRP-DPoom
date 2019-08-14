@@ -73,16 +73,33 @@
 ### Mainstream robot operationg method - About easy™ series
 #### [About easy™ Series](easySeries.md)
 소개 페이지로 넘어갑니다. easyGO, easyControl, esayVector, easyDrive 는 All-in-one 파이썬 기반 Turtlebot3 주행 보조 라이브러리입니다.
-
+### SLAM with Depth Camera
+#### [About SLAM](SLAM.md)
+소개 페이지로 넘어갑니다. 현재 진행 중인 SLAM 개발의 소스코드는 연구개발 목적상 실제 코드를 비공개로 분류했습니다. 완료 후 오픈소스 공개 예정
 
 ### About overnight develop (9to9)
 We have very unique and seems counter-productive tradition on this squad. It is called "9to9" it's overnight develop since 9 pm to next morning 9 am, although it's quiet negative affect on our daily life on next day. Such as wake up at 9pm instead. But after several 9to9, we had lots of significant breakthrough on our research.
 
-### Develop Schedule
+### Quarterly Development Achievement
   1. 19' 1Q (formal 9to9 start since March)<br/>
-    __Week 1.__ Setup development environment.<br/>
-    __Week 2.__ Ground Segmentation. <br/>
-    __Week 3.__ Turtlebot3 Waffle pi Setup for testbed and change platform Computer to Lattepanda Alpha.    <br/>
+      1. 로봇 플랫폼 구축
+      2. 플랫폼 컴퓨팅 유닛 구축
+      3. 기본 주행을 위한 파이썬 기반 주행 라이브러리 개발
+      4. 뎁스 카메라 구동 파이프 라인 및 뎁스 맵 응용 소프트웨어 개발
 
+  2. 19' 2Q (formal 9to9 start since March)<br/>
+      1. 자동 충전 기능
+      2. 뎁스 카메라를 이용한 주행가능영역 개발
+      3. 뎁스 카메라를 이용한 Object Active Tracking 개발
+      4. 주행 라이브러리 고도화 (자유 곡률 주행, 경로 기반 안정적인 주행, 실시간 경로 이탈 자동 복귀)
+      5. 전력 효율 위한 OpenCR(모터 드라이버) - LattePanda(Computing Unit) 간의 전력 공유 및 USB 전원부 우회 공급부 구성
+    
+  3. 19' 3Q (formal 9to9 start since March)<br/>
+      1. RGB-D 카메라를 이용한 실시간 실내 측위 및 맵핑
+      2. Human Interactive 기능 삽입
+      3. Gesture Control
+      4. Graph-Base Motion/Path Planning 솔루셔 개발 - 주행 라이브러리 고도화 일환
+      5. __귀여운 표정!__
+      
 ### Acknowledgement
-This research is funded by <br/> DGIST Undergraduate Research Program (grants number : ugrp-21)<br/> SAMSUNG Research IRP (grants number : )
+This research is funded by <br/> DGIST Undergraduate Group Research Program 
