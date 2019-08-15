@@ -8,6 +8,7 @@ http://wiki.ros.org/kinetic/Installation/Ubuntu
 https://github.com/IntelRealSense/realsense-ros 
 
 (Note: install step 1 for debian is the easiest)
+
 (Note: step 2 is already done by installing ROS Kinetic above)
 
 (if error occurs, check below)
