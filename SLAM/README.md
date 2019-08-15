@@ -1,7 +1,8 @@
 # Installation
 
-## ROS
+## ROS Kinetic
 http://wiki.ros.org/kinetic/Installation/Ubuntu
+(Make sure 'roscore' is available.)
 
 ## Realsense
 https://github.com/IntelRealSense/realsense-ros (install step 1 for debian is the easiest)
