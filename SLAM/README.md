@@ -4,8 +4,11 @@
 http://wiki.ros.org/kinetic/Installation/Ubuntu
 (Make sure 'roscore' is available.)
 
-## Realsense
-https://github.com/IntelRealSense/realsense-ros (install step 1 for debian is the easiest)
+## Realsense-ros
+https://github.com/IntelRealSense/realsense-ros 
+
+(Note: install step 1 for debian is the easiest)
+(Note: step 2 is already done by installing ROS Kinetic above)
 
 (if error occurs, check below)
 > If you met catkin_make error related to 'ddynamic' : 
