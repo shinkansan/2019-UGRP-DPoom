@@ -23,7 +23,7 @@ https://github.com/IntelRealSense/realsense-ros
 >
 > https://answers.ros.org/question/325039/apt-update-fails-cannot-install-pkgs-key-not-working/
 
-## Realsense-ros packages include rtabmap
+## Another Dependencies and rtabmap
 https://github.com/IntelRealSense/realsense-ros/wiki/SLAM-with-D435i
 
 
