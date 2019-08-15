@@ -28,7 +28,7 @@ https://github.com/IntelRealSense/realsense-ros/wiki/SLAM-with-D435i
 
 
 # Make custom rosbag file
-__I strongly do not recommend to record a custom rosbag file to test rtabmap !!!!!!!!__ It may be more efficient way to make a map file (pcd file). However, rtabmap gives you a chance to restore odometry when it fails tracking, by relocating the camera to the last tracked position. __So I recommend to make a map by online method, not by using rosbag file!!__
+__I strongly DO NOT recommend to record a custom rosbag file to test rtabmap !!!!!!!!__ It may be more efficient way to make a map file (pcd file). However, rtabmap gives you a chance to restore odometry when it fails tracking, by relocating the camera to the last tracked position. __So I recommend to make a map by online method, not by using rosbag file!!__
 
 You can see the specific instructions of recording rosbag file with 'D435i' and launching rtabmap with your custom rosbag. 
 [rtabmap_using_custom_rosbag.md](rtabmap_using_custom_rosbag.md)
