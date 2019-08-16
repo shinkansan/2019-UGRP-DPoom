@@ -12,7 +12,7 @@ def convert2list(img):
         for j in range(height):
             maze[i][j] = 1 if img[i][j] > 0 else 0
 
-    return maze
+    return maze.tolist()
 
 def img2binList(lenWidth, GRID_SIZE=50, verbose=0):
     
@@ -68,11 +68,9 @@ def img2binList(lenWidth, GRID_SIZE=50, verbose=0):
         cv2.waitKey(0)
 
     maze = convert2list(resized_gray)
-    print(maze)
-
-
     cv2.destroyAllWindows()
+    return maze
 
 if __name__ == '__main__':
-    img2binList(lenWidth=500.0, GRID_SIZE=20, verbose=0) # all unit is cm
+    img2binList(lenWidth=500.0, GRID_SIZE=5, verbose=0) # all unit is cm
                                                          # verbose to 1 for debugging
