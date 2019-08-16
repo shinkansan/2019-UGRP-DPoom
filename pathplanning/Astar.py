@@ -31,19 +31,19 @@ def discost(maze, x, y):
     for new_position in eight_neighbors:
         node_position = (x + new_position[0], y + new_position[1])
         if maze[node_position[0]][node_position[1]] == 1:
-            distance_cost += 300   # 300 is heuristic value obtained by experiments
+            distance_cost += 3
             break
         else:
             for new_position2 in eight_neighbors:
                 node_position2 = (node_position[0] + new_position2[0], node_position[1] + new_position2[1])
                 if maze[node_position2[0]][node_position2[1]] == 1:
-                    distance_cost += 200
+                    distance_cost += 2
                     break
                 else:
                     for new_position3 in eight_neighbors:
                         node_position3 = (node_position2[0] + new_position3[0], node_position2[1] + new_position3[1])
                         if maze[node_position3[0]][node_position3[1]] == 1:
-                            distance_cost += 100
+                            distance_cost += 1
     return distance_cost
 
 
@@ -125,7 +125,8 @@ def astar(maze, start, end):
                 child.g = (current_node.g + ((child.position[0]-current_node.position[0])**2+(child.position[1]-current_node.position[1])**2))
                 child.h = (((child.position[0] - end_node.position[0]) ** 2) + ((child.position[1] - end_node.position[1]) ** 2))
                 # New cost 'distance cost' as dc
-                child.dc = discost(maze, child.position[0], child.position[1])
+                # The weight of the distance cost has been set to make the path at least 3 grid away from the obstacles.
+                child.dc = 1000 * discost(maze, child.position[0], child.position[1])
                 child.f = child.g + child.h + child.dc
 
             # Child is already in the open list
