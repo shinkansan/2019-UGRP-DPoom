@@ -6,7 +6,7 @@ import cv2
 import time
 import img2binList as i2b
 import random
-
+import operator
 
 class Node():
     """A node class for A* Pathfinding"""
@@ -26,26 +26,32 @@ class Node():
 
 def discost(maze, x, y):
     """Calculate the distance cost according to neighbor obstacles"""
-    """If the distance between current node and obstacle is less than 3, 
+    """If the distance(in grid scale) between current node and obstacle is less than 4, 
     the distance cost will be given according to that distance"""
     distance_cost = 0
     eight_neighbors = [(0, -1), (0, 1), (-1, 0), (1, 0), (-1, -1), (-1, 1), (1, -1), (1, 1)]
     for new_position in eight_neighbors:
         node_position = (x + new_position[0], y + new_position[1])
         if maze[node_position[0]][node_position[1]] == 1:
-            distance_cost += 3
+            distance_cost += 4
             break
         else:
             for new_position2 in eight_neighbors:
                 node_position2 = (node_position[0] + new_position2[0], node_position[1] + new_position2[1])
                 if maze[node_position2[0]][node_position2[1]] == 1:
-                    distance_cost += 2
+                    distance_cost += 3
                     break
                 else:
                     for new_position3 in eight_neighbors:
                         node_position3 = (node_position2[0] + new_position3[0], node_position2[1] + new_position3[1])
                         if maze[node_position3[0]][node_position3[1]] == 1:
-                            distance_cost += 1
+                            distance_cost += 2
+                            break
+                        else:
+                            for new_position4 in eight_neighbors:
+                                node_position4 = (node_position3[0] + new_position4[0], node_position3[1] + new_position4[1])
+                                if maze[node_position4[0]][node_position4[1]] == 1:
+                                    distance_cost += 1
     return distance_cost
 
 
@@ -124,7 +130,8 @@ def astar(maze, start, end):
                     break
             else:
                 # Create the f, g, and h values
-                child.g = (current_node.g + ((child.position[0]-current_node.position[0])**2+(child.position[1]-current_node.position[1])**2))
+                # child.g = (current_node.g + ((child.position[0]-current_node.position[0])**2+(child.position[1]-current_node.position[1])**2))
+                child.g = current_node.g + 1
                 child.h = (((child.position[0] - end_node.position[0]) ** 2) + ((child.position[1] - end_node.position[1]) ** 2))
                 # New cost 'distance cost' as dc
                 # The weight of the distance cost has been set to make the path at least 3 grid away from the obstacles.
@@ -140,6 +147,18 @@ def astar(maze, start, end):
                 open_list.append(child)
 
 
+def convert2meter(path, scale=0.5):
+    """convert the path in meter scale"""
+    """in general, one grid represent 0.5 meter"""
+    path_list = [list(elem) for elem in path]
+    metered_path = []
+    for grid in path_list:
+        metered_grid = [i * scale for i in grid]
+        metered_path.append(metered_grid)
+    return metered_path
+
+
+
 def main():
     # Running Time Check
     starttime = time.time()
@@ -148,8 +167,8 @@ def main():
     maze = i2b.img2binList(lenWidth=500.0, GRID_SIZE=5, verbose=0)
 
     # Start and End point setting
-    start = (random.randrange(70, 90), random.randrange(10, 30))
-    end = (random.randrange(10, 30), random.randrange(70, 90))
+    start = (random.randrange(80, 90), random.randrange(10, 20))
+    end = (random.randrange(10, 20), random.randrange(80, 90))
     print("Start =", start, '\n', "End =", end)
 
     # Procedure Checking
@@ -157,6 +176,8 @@ def main():
     path = astar(maze, start, end)
     print("Path planning Succeed")
     print("time :", time.time() - starttime)
+    print("Path : ", path)
+    print("Meter scale Path : ", convert2meter(path))
 
     # Visualizing binary map and generated path
     showmaze = np.array(maze).astype(np.uint8)
