@@ -23,7 +23,11 @@ ROS easyGo and ros docs
 
 [Publisher to a topic](http://wiki.ros.org/rospy/Overview/Publishers%20and%20Subscribers)
 
-# How to catkin_make
+# Dependencies
+* ROS Kinetic
+* turtlebot3 : http://emanual.robotis.com/docs/en/platform/turtlebot3/pc_setup/#pc-setup
+
+## How to catkin_make
 you should make catking_ws folder right after make files in catkin_ws and its sub directories
 
 
