@@ -2,17 +2,15 @@ import cv2
 import numpy as np
 import imutils
 
-def bin_convolution(img, mapWidth, mapHeight):
-    pass
-
 def convert2list(img):
     height, width = img.shape
     maze = np.zeros((height,width), np.uint8)
     for i in range(width):
         for j in range(height):
-            maze[i][j] = 1 if img[i][j] > 0 else 0
+            # print(i, j)
+            maze[j][i] = 1 if img[j][i] > 0 else 0
 
-    return maze.tolist()
+    return maze
 
 def img2binList(lenWidth, GRID_SIZE=50, verbose=0):
     
@@ -51,11 +49,13 @@ def img2binList(lenWidth, GRID_SIZE=50, verbose=0):
         cv2.waitKey(0)
     
     # print("cropping image as largest contour")
-    (x, y, w, h) = cv2.boundingRect(cnts[i])
-    gray = gray[y:y+h, x:x+h]
+    (x, y, w, h) = cv2.boundingRect(cnts[idxLargest])
+    gray = gray[y:y+h, x:x+w]
     if verbose:
         cv2.imshow("img", gray)
         cv2.waitKey(0)
+
+    print("the cropped maze size is "+str(w)+" X "+str(h))
 
     mapWidth = (int) (lenWidth // GRID_SIZE)
     mapHeight = (int) ((h/w)*lenWidth // GRID_SIZE)
@@ -68,9 +68,11 @@ def img2binList(lenWidth, GRID_SIZE=50, verbose=0):
         cv2.waitKey(0)
 
     maze = convert2list(resized_gray)
+    print(maze)
+
+
     cv2.destroyAllWindows()
-    return maze
 
 if __name__ == '__main__':
-    img2binList(lenWidth=500.0, GRID_SIZE=5, verbose=0) # all unit is cm
+    img2binList(lenWidth=500.0, GRID_SIZE=20, verbose=1) # all unit is cm
                                                          # verbose to 1 for debugging
