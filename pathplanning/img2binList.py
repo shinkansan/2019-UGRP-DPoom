@@ -6,7 +6,7 @@ def convert2list(img):
     height, width = img.shape
     maze = np.zeros((height,width), np.uint8)
     for i in range(width):
-        for j in range(height):
+        for j in range(height): 
             # print(i, j)
             maze[j][i] = 1 if img[j][i] > 0 else 0
 
