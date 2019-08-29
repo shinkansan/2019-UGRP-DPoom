@@ -14,7 +14,7 @@ def convert2list(img):
 
 def img2binList(lenWidth, GRID_SIZE=50, verbose=0):
     
-    img = cv2.imread("test.jpg")
+    img = cv2.imread("E5_223.jpg")
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     
     _, gray = cv2.threshold(gray, 112, 255, cv2.THRESH_BINARY_INV)
@@ -72,7 +72,8 @@ def img2binList(lenWidth, GRID_SIZE=50, verbose=0):
 
 
     cv2.destroyAllWindows()
+    return maze
 
 if __name__ == '__main__':
-    img2binList(lenWidth=500.0, GRID_SIZE=20, verbose=1) # all unit is cm
+    img2binList(lenWidth=1000.0, GRID_SIZE=50, verbose=1) # all unit is cm
                                                          # verbose to 1 for debugging

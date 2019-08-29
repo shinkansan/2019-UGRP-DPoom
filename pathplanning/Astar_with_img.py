@@ -134,8 +134,8 @@ def astar(maze, start, end):
                 child.g = current_node.g + 1
                 child.h = (((child.position[0] - end_node.position[0]) ** 2) + ((child.position[1] - end_node.position[1]) ** 2))
                 # New cost 'distance cost' as dc
-                # The weight of the distance cost has been set to make the path at least 3 grid away from the obstacles.
-                child.dc = 1000 * discost(maze, child.position[0], child.position[1])
+                # The weight of the distsance cost has been set to make the path at least 3 grid away from the obstacles.
+                child.dc = 100 * discost(maze, child.position[0], child.position[1])
                 child.f = child.g + child.h + child.dc
 
             # Child is already in the open list
@@ -164,11 +164,11 @@ def main():
     starttime = time.time()
 
     # Convert map image to binary list
-    maze = i2b.img2binList(lenWidth=500.0, GRID_SIZE=5, verbose=0)
+    maze = i2b.img2binList(lenWidth=1000.0, GRID_SIZE=50, verbose=0)
 
     # Start and End point setting
-    start = (random.randrange(80, 90), random.randrange(10, 20))
-    end = (random.randrange(10, 20), random.randrange(80, 90))
+    start = (4, 4)
+    end = (12, 8)
     print("Start =", start, '\n', "End =", end)
 
     # Procedure Checking
@@ -186,7 +186,7 @@ def main():
         showmaze[colorpath[0]][colorpath[1]] = 50
     showmaze[start[0]][start[1]] = 180
     showmaze[end[0]][end[1]] = 180
-    showmaze = cv2.resize(showmaze, None, fx=7, fy=7, interpolation=cv2.INTER_NEAREST)
+    showmaze = cv2.resize(showmaze, None, fx=20, fy=20, interpolation=cv2.INTER_NEAREST)
     cv2.imshow('Sample A* algorithm run with distance cost', showmaze)
     cv2.waitKey(0)
 
