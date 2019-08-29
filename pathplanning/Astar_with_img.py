@@ -135,7 +135,7 @@ def astar(maze, start, end):
                 child.h = (((child.position[0] - end_node.position[0]) ** 2) + ((child.position[1] - end_node.position[1]) ** 2))
                 # New cost 'distance cost' as dc
                 # The weight of the distsance cost has been set to make the path at least 3 grid away from the obstacles.
-                child.dc = 100 * discost(maze, child.position[0], child.position[1])
+                child.dc = 1 * discost(maze, child.position[0], child.position[1])
                 child.f = child.g + child.h + child.dc
 
             # Child is already in the open list
@@ -147,7 +147,7 @@ def astar(maze, start, end):
                 open_list.append(child)
 
 
-def convert2meter(path, scale=0.5):
+def convert2meter(path, scale=0.2):
     """convert the path in meter scale"""
     """in general, one grid represent 0.5 meter"""
     path_list = [list(elem) for elem in path]
@@ -164,11 +164,11 @@ def main():
     starttime = time.time()
 
     # Convert map image to binary list
-    maze = i2b.img2binList(lenWidth=1000.0, GRID_SIZE=50, verbose=0)
+    maze = i2b.img2binList(lenWidth=1000.0, GRID_SIZE=20, verbose=0)
 
     # Start and End point setting
-    start = (4, 4)
-    end = (12, 8)
+    start = (30, 20)
+    end = (10, 37)
     print("Start =", start, '\n', "End =", end)
 
     # Procedure Checking
@@ -186,7 +186,7 @@ def main():
         showmaze[colorpath[0]][colorpath[1]] = 50
     showmaze[start[0]][start[1]] = 180
     showmaze[end[0]][end[1]] = 180
-    showmaze = cv2.resize(showmaze, None, fx=20, fy=20, interpolation=cv2.INTER_NEAREST)
+    showmaze = cv2.resize(showmaze, None, fx=10, fy=10, interpolation=cv2.INTER_NEAREST)
     cv2.imshow('Sample A* algorithm run with distance cost', showmaze)
     cv2.waitKey(0)
 
