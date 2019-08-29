@@ -1,7 +1,8 @@
 #! /usr/bin/env python
 import rospy
 from matplotlib import pyplot as plt
-from nav_msgs.msg import Odometry
+# from nav_msgs.msg import Odometry
+from geometry_msgs.msg import PoseWithCovarianceStamped
 
 def callback(data):
 	print(str(data.pose.pose.position)+"\n")
@@ -15,7 +16,7 @@ def callback(data):
 
 def listener():
 	rospy.init_node('listener', anonymous=True)
-	rospy.Subscriber("/rtabmap/odom", Odometry, callback)
+	rospy.Subscriber("/rtabmap/localization_pose", PoseWithCovarianceStamped, callback)
 	rospy.spin()
 
 if __name__ == '__main__':
