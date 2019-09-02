@@ -28,7 +28,7 @@ def convert2list(img):
     maze = np.zeros((height, width), np.uint8)
     for i in range(width):
         for j in range(height):
-            maze[i][j] = 1 if img[i][j] > 0 else 0
+            maze[j][i] = 1 if img[j][i] > 0 else 0
 
     return maze.tolist()
 
@@ -68,8 +68,8 @@ def img2binList(img, lenWidth, GRID_SIZE=50, verbose=0):
         cv2.waitKey(0)
 
     # print("cropping image as largest contour")
-    (x, y, w, h) = cv2.boundingRect(cnts[i])
-    gray = gray[y:y + h, x:x + h]
+    (x, y, w, h) = cv2.boundingRect(cnts[idxLargest])
+    gray = gray[y:y + h, x:x + w]
     if verbose:
         cv2.imshow("img", gray)
         cv2.waitKey(0)
@@ -87,7 +87,6 @@ def img2binList(img, lenWidth, GRID_SIZE=50, verbose=0):
     my_maze = np.array(maze)
     solution = pyfmm.march(my_maze == 1, batch_size=10000)[0] # NOTE : white area means walkable area
     DISTANCECOSTMAP = solution
-    print('done')
 
     # cv2.destroyAllWindows()
     return maze
@@ -286,7 +285,7 @@ def main():
     plt.title('Irregular boundary')
     plt.show()
     cv2.waitKey(0)
-
+    
 
 if __name__ == '__main__':
     main()
