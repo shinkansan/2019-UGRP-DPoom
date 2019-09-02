@@ -239,13 +239,13 @@ def main():
     # Running Time Check
     starttime = time.time()
     # Convert map image to binary list
-    img = cv2.imread("test2.png")
-    maze = img2binList(img, lenWidth=500.0, GRID_SIZE=5, verbose=0)
+    img = cv2.imread("E5_223.jpg")
+    maze = img2binList(img, lenWidth=1000.0, GRID_SIZE=20, verbose=0)
     # Start and End point setting
-    start = (85, 15)
-    end = (15, 85)
-    # start = (30, 20)
-    # end = (10, 37)
+    # start = (85, 15)
+    # end = (15, 85)
+    start = (30, 20)
+    end = (10, 37)
     # start = random_walkable_position(100, 100)
     # end = random_walkable_position(100, 100)
     print("Start =", start, '\n', "End =", end)
@@ -285,7 +285,7 @@ def main():
     plt.title('Irregular boundary')
     plt.show()
     cv2.waitKey(0)
-    
+
 
 if __name__ == '__main__':
     main()
