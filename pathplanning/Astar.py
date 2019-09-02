@@ -126,8 +126,20 @@ def walkable_plane_list(x_range, y_range, rigidity=1.8):
     return walkable_plane
 
 
+def convert2meter(path, scale=0.2):
+    """convert the path in meter scale"""
+    """in general, one grid represent 0.5 meter"""
+    path_list = [list(elem) for elem in path]
+    metered_path = []
+    for grid in path_list:
+        metered_grid = [i * scale for i in grid]
+        metered_path.append(metered_grid)
+    return metered_path
+
+
 
 def astar(maze, start, end):
+
     """Returns a list of tuples as a path from the given start to the given end in the given maze"""
     # Create start and end node
     start_node = Node(None, start)
@@ -223,31 +235,15 @@ def astar(maze, start, end):
                 open_list.append(child)
 
 
-def convert2meter(path, scale=0.5):
-    """convert the path in meter scale"""
-    """in general, one grid represent 0.5 meter"""
-    path_list = [list(elem) for elem in path]
-    metered_path = []
-    for grid in path_list:
-        metered_grid = [i * scale for i in grid]
-        metered_path.append(metered_grid)
-    return metered_path
-
-
-
-def main():
+def pathplanning(start, end, image_path, verbose=0):
     # Running Time Check
     starttime = time.time()
-    # Convert map image to binary list
-    img = cv2.imread("E5_223.jpg")
+
+	# Convert map image to binary list
+    img = cv2.imread(image_path)
     maze = img2binList(img, lenWidth=1000.0, GRID_SIZE=20, verbose=0)
     # Start and End point setting
-    # start = (85, 15)
-    # end = (15, 85)
-    start = (30, 20)
-    end = (10, 37)
-    # start = random_walkable_position(100, 100)
-    # end = random_walkable_position(100, 100)
+
     print("Start =", start, '\n', "End =", end)
 
     # Procedure Checking
@@ -256,36 +252,43 @@ def main():
     print("Path planning Succeed")
     print("time :", time.time() - starttime)
 
-    # Print generated Path (in grid scale and meter scale)
-    print("Path : ", path)
-    print("Meter scale Path : ", convert2meter(path))
+    if verbose:
+        # Print generated Path (in grid scale and meter scale)
+        print("Path : ", path)
+        print("Meter scale Path : ", convert2meter(path))
 
-    # Visualizing binary map and generated path
-    showmaze = np.array(maze).astype(np.uint8)
-    showmaze *= 255
-    num_of_searched_node = 0
-    """
-    for walkable in walkable_plane_list(100, 100):          # checking walkable plane
+        # Visualizing binary map and generated path
+        showmaze = np.array(maze).astype(np.uint8)
+        showmaze *= 255
+        num_of_searched_node = 0
+        """
+        for walkable in walkable_plane_list(100, 100):          # checking walkable plane
         showmaze[walkable[0]][walkable[1]] = 60
-    """
-    for searched in checked_positions:
-        showmaze[searched[0]][searched[1]] = 40
-    for colorpath in path:
-        showmaze[colorpath[0]][colorpath[1]] = 70
-        num_of_searched_node += 1
-    print(num_of_searched_node)
+        """
+        for searched in checked_positions:
+            showmaze[searched[0]][searched[1]] = 40
+        for colorpath in path:
+            showmaze[colorpath[0]][colorpath[1]] = 70
+            num_of_searched_node += 1
+        print(num_of_searched_node)
 
-    showmaze[start[0]][start[1]] = 150
-    showmaze[end[0]][end[1]] = 200
-    showmaze = cv2.resize(showmaze, None, fx=7, fy=7, interpolation=cv2.INTER_NEAREST)
-    cv2.imshow('Sample A* algorithm run with distance cost', showmaze)
-    plt.imshow(DISTANCECOSTMAP, interpolation='None')
-    # plt.imshow(my_image)
-    plt.colorbar()
-    plt.title('Irregular boundary')
-    plt.show()
-    cv2.waitKey(0)
+        showmaze[start[0]][start[1]] = 150
+        showmaze[end[0]][end[1]] = 200
+        showmaze = cv2.resize(showmaze, None, fx=7, fy=7, interpolation=cv2.INTER_NEAREST)
+        cv2.imshow('Sample A* algorithm run with distance cost', showmaze)
+        cv2.waitKey(0)
+        plt.imshow(DISTANCECOSTMAP, interpolation='None')
+        # plt.imshow(my_image)
+        plt.colorbar()
+        plt.title('Irregular boundary')
+        plt.show()
+        plt.close()  # press 'Q' to exit
 
+    return convert2meter(path)
 
 if __name__ == '__main__':
-    main()
+
+    start = (30, 20)
+    end = (10, 37)
+
+    pathplanning(start, end, image_path="E5_223.jpg", verbose=0)
