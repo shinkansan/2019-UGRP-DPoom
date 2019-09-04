@@ -4,6 +4,7 @@ PathPlaning Algorithm for Dpoom
 ## Modified A* algorithm with Distance cost
 For planning path for indoor robots, the original A* algorithm has a problem; __Genelating the path too close to obstacles.__ 
 Therefore, in this modification, __"Distance Cost"__ is added to cost calculation of A* algorithm.  
+
 _f = g + h + __d___ 
 
 The distance cost is given to the certain node according to the distance of the node and nearing obstacles. 
