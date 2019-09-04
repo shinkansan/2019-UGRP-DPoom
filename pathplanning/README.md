@@ -45,6 +45,10 @@ def img2binList(img, lenWidth, GRID_SIZE=50, verbose=0):
 ```
 Convert RGB image to binary list. In this function, the image file is cropped first, and then converted to binary list. Additionally, global variable __DISTANCECOSTMAP__ is created containing the information about the distance from every grid to nearing obstacles.
 
+| Original Image | Cropped Image | Binary List | DISTANCECOSTMAP |
+|---|---|---|---|
+|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/img/original_map_image.PNG)|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/img/cropped_map_image.PNG)|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/img/cropped_binary_list.PNG)|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/img/DISTANCECOSTMAP.PNG)|
+
 ### 2. distcost
 ```bash
 def distcost(x, y, safty_value=2):
