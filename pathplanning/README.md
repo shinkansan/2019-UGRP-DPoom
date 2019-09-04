@@ -33,8 +33,8 @@ def pathplanning(start, end, image_path, verbose=0):
   return convert2meter(path) 
   # Return the metered path, which is converted from  grid scale to grid scale
 ```
-To generate the path, offer these informations; start grid position, end grid position, path of the map image file.
-Return the list of meter-scaled path positions.
+To generate the path, offer these informations; start grid position, end grid position, and path of the map image file. 
+This function return the list of meter-scaled path positions.
 
 ## Main functions
 ### 1. img2binList
