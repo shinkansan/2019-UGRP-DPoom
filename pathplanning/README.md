@@ -53,8 +53,8 @@ Parameters: __lenWidth__ is the actual width of the map in _cm_ scale, and __GRI
 ### 2. distcost
 ```bash
 def distcost(x, y, safty_value=2):
-  return 50 * distance_cost 
-  # 50 is the weight of distance cost. It can be manually tuned.
+  return distance_cost 
+  # You can manually tune the weight of the distance cost by multiplying to the returning value.
 ```
 It calculate the distance cost of the specific grid(x, y) using global variable __DISTANCECOSTMAP__. Large safty value make the path more away from the wall. However, if it is too large, almost every grid will have maximum distance cost(=1000) which leads to eliminate the meaning of distance cost. Therfore, this value should be manually tuned.
 
