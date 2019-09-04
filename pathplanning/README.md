@@ -30,15 +30,20 @@ import time #if you want to see calculation speed of the algorithm
 ## How to generate pathplanning
 ```bash
 def pathplanning(start, end, image_path, verbose=0):
-  return convert2meter(path) # Return the path with metered scale
+  return convert2meter(path) 
+  # Return the metered path, which is converted from  grid scale to grid scale
 ```
+To generate the path, offer these informations; start grid position, end grid position, path of the map image file.
+Return the list of meter-scaled path positions.
 
 ## Main functions
 ### 1. img2binList
 ```bash
 def img2binList(img, lenWidth, GRID_SIZE=50, verbose=0):
+  global DISTANCECOSTMAP
   return maze
 ```
+Convert RGB image to binary list. In this function, the image file is cropped first, and then converted to binary list. Additionally, global variable __DISTANCECOSTMAP__ is created containing the information about the distance from every grid to nearing obstacles.
 
 ### 2. distcost
 ```bash
