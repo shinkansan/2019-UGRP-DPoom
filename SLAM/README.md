@@ -94,3 +94,10 @@ __Since our path planning and driving modules (easySeries) requires (x,y) positi
 </p>
 
 The left image is the result of traveling in my office while running pure localization of rtabmap. The right image is the 2D projection of created map. You can see that odometry provides really accurate position data. The position data describes relative location from the origin, and the unit is meter. As result of comparision, error of the data is just few centimeters. 
+
+# Field Test
+| Initializing First Pose | Localization While Robot Driving |
+|---|---|
+|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/GIF/SLAM_initialize_pose.gif)|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/GIF/SLAM_live_demo.gif)|
+
+When the SLAM first launched, it initializes robot's first pose by matching the features on the pre-created SLAM map. You can see the results on the left. The live demo on the right is recorded on the DPoom. DPoom was controlled by keyboard input using [easyControl](/easygo/easyControl.py). The live demo shows that SLAM could perform real-time localization while the robot is actually driving. And the pose is published to the ROS.
