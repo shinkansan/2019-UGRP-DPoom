@@ -76,9 +76,9 @@
 ### SLAM with Depth Camera
 #### [About SLAM](SLAM.md)
 소개 페이지로 넘어갑니다. 현재 진행 중인 SLAM 개발의 소스코드는 연구개발 목적상 실제 코드를 비공개로 분류했습니다. 완료 후 오픈소스 공개 예정
-### seunghyun
-#### [About path planning](xxxxxx)
-소개 페이지로 넘어갑니다. 현재 진행 중인 SLAM 개발의 소스코드는 연구개발 목적상 실제 코드를 비공개로 분류했습니다. 완료 후 오픈소스 공개 예정
+### Path Planning (based on A* algorithm)
+#### [About path planning](Pathplanning.md)
+소개 페이지로 넘어갑니다. A* 알고리즘을 기반으로 Fast Marching Method를 통한 distance cost를 추가해 장애물에서 충분한 거리를 두고 이동하도록 만들어진 Path Planning Algorithm입니다.
 
 ### About overnight develop (9to9)
 We have very unique and seems counter-productive tradition on this squad. It is called "9to9" it's overnight develop since 9 pm to next morning 9 am, although it's quiet negative affect on our daily life on next day. Such as wake up at 9pm instead. But after several 9to9, we had lots of significant breakthrough on our research.
