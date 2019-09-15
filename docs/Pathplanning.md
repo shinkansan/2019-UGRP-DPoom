@@ -14,7 +14,7 @@ Therefore, because the original A* algorithm select nodes with minimum cost, the
 
 | Without distance cost | With distance cost |
 |---|---|
-|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/img/without_d_cost.PNG)|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/img/with_d_cost.PNG)|
+|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/docs/img/without_d_cost.png)|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/docs/img/with_d_cost.png)|
 
 ## Dependency
 ```bash
@@ -48,7 +48,7 @@ Parameters: __lenWidth__ is the actual width of the map in _cm_ scale, and __GRI
 
 | Original Image (SLAM) | Cropped Image | Binary List | DISTANCECOSTMAP |
 |---|---|---|---|
-|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/img/original_map_image.PNG)|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/img/cropped_map_image.PNG)|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/img/cropped_binary_list.PNG)|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/img/DISTANCECOSTMAP.PNG)|
+|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/docs/img/original_map_image.png)|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/docs/img/cropped_map_image.png)|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/docs/img/cropped_binary_list.png)|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/docs/img/DISTANCECOSTMAP.png)|
 
 ### 2. distcost
 ```bash
@@ -65,4 +65,4 @@ def astar(maze, start, end):
 ```
 It generate the path list in grid scale. The input _maze_ is type of binary list which is the returning form of __img2binList__ function. Return value should be reversed because A* algorithm collect the elements of the path from the end node to start node.
 
-<center><img src="https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/img/E5_223_path.PNG" alt="drawing" width="480"/></center>
+<center><img src="https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/docs/img/E5_223_path.png" alt="drawing" width="480"/></center>
