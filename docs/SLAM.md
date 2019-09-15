@@ -68,7 +68,7 @@ The source is here [launch/opensource_tracking_tk_localizationl.launch](launch/o
 ## odom_listener
 The odometry data is published as name of '/rtabmap/odom' while rtabmap localization is running. It contains data as below:
 
-<img src="/img/rtabmap_odom.png" alt="drawing" width="320"/>
+<img src="img/rtabmap_odom.png" alt="drawing" width="320"/>
 
 __Since our path planning and driving modules (easySeries) requires (x,y) position of the robot, [odom_listener.py](odom_listener.py) is made for subscribing '/rtabmap/odom' and parsing it to position data.__ And I plot its trajactory using matplotlib.
 
@@ -82,6 +82,6 @@ The left image is the result of traveling in my office while running pure locali
 # Field Test
 | Initializing First Pose | Localization While Robot Driving |
 |---|---|
-|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/docs/gif/SLAM_initialize_pose.gif)|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/docs/gif/SLAM_live_demo.gif)|
+|![a](gif/SLAM_initialize_pose.gif)|![a](gif/SLAM_live_demo.gif)|
 
 When the SLAM first launched, it initializes robot's first pose by matching the features on the pre-created SLAM map. You can see the results on the left. The live demo on the right is recorded on the DPoom. DPoom was controlled by keyboard input using [easyControl](/easygo/easyControl.py). The live demo shows that SLAM could perform real-time localization while the robot is actually driving. And the pose is published to the ROS.
