@@ -80,6 +80,7 @@ __Since our path planning and driving modules (easySeries) requires (x,y) positi
 The left image is the result of traveling in my office while running pure localization of rtabmap. The right image is the 2D projection of created map. You can see that odometry provides really accurate position data. The position data describes relative location from the origin, and the unit is meter. As result of comparision, error of the data is just few centimeters. 
 
 # Field Test
+
 | Initializing First Pose | Localization While Robot Driving |
 |---|---|
 |![a](gif/SLAM_initialize_pose.gif)|![a](gif/SLAM_live_demo.gif)|
