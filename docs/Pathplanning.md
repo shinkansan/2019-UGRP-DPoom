@@ -14,7 +14,7 @@ Therefore, because the original A* algorithm select nodes with minimum cost, the
 
 | Without distance cost | With distance cost |
 |---|---|
-|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/docs/img/without_d_cost.png)|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/docs/img/with_d_cost.png)|
+|![a](img/without_d_cost.png)|![a](img/with_d_cost.png)|
 
 ## Dependency
 ```bash
