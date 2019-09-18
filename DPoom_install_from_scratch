@@ -1,0 +1,50 @@
+sudo apt purge python2.7-minimal   # erase python2.7 
+sudo apt-get install python3-dev
+
+sudo apt install git
+git clone https://github.com/shinkansan/2019-UGRP-DPoom.git
+
+# install ROS kinetic
+http://wiki.ros.org/kinetic/Installation/Ubuntu
+
+# install realsense SDK 2.0
+Go to: https://github.com/IntelRealSense/realsense-ros
+In Step 1, Install Debian Package !!
+IF 'realsense-viewer' is working, Step 1 is finish (must install optional apt-get too!!)
+
+
+Step 2 is already finished, because ROS is installed above
+
+*** when run 'python', python2.7 is reinstalled... 
+So, followed these steps
+----------
+mkdir catkin_ws
+cd catkin_ws
+mkdir src
+cd src 
+git clone https://github.com/ros/geometry
+git clone https://github.com/ros/geometry2
+cd ..
+virtualenv -p /usr/bin/python3 venv
+source venv/bin/activate
+pip install catkin_pkg pyyaml empy rospkg numpy
+
+** sudo apt-get install ros-kinetic-tf2-bullet
+
+catkin_make
+source devel/setup.bash
+-----------
+
+
+* sudo apt-get install ros-kinetic-ddynamic-reconfigure
+Follow step 3
+
+
+# when sys.path
+ sys.path
+['', '/home/dpoom/catkin_ws/devel/lib/python3/dist-packages', '/opt/ros/kinetic/lib/python2.7/dist-packages', '/home/dpoom/catkin_ws/venv/lib/python35.zip', '/home/dpoom/catkin_ws/venv/lib/python3.5', '/home/dpoom/catkin_ws/venv/lib/python3.5/plat-x86_64-linux-gnu', '/home/dpoom/catkin_ws/venv/lib/python3.5/lib-dynload', '/usr/lib/python3.5', '/usr/lib/python3.5/plat-x86_64-linux-gnu', '/home/dpoom/catkin_ws/venv/lib/python3.5/site-packages']
+
+python2.7 must be after 'devel/lib/python3' !!!!!
+
+Then, 'import tf' is success!!!!!!
+
