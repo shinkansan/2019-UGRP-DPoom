@@ -285,7 +285,7 @@ def pathplanning(start, end, image_path, verbose=0):
         plt.show()
         plt.close()  # press 'Q' to exit
 
-    return convert2meter(path)
+    return path
 
 if __name__ == '__main__':
 
