@@ -247,7 +247,8 @@ def pathplanning(start, end, image_path, verbose=0):
     print("Start =", start, '\n', "End =", end)
 
     # Procedure Checking
-    print(" ", "Path planning Proceeding...", " ", sep='\n')
+    print(" ", "Path planning Proceeding...", " ")
+
     path = astar(maze, start, end)
     print("Path planning Succeed")
     print("time :", time.time() - starttime)
