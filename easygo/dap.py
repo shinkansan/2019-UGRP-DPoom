@@ -40,6 +40,7 @@ def easy_test(path, velRobot):     # path is 2D array (x, y)
         current_position = (-(easyVector.get_poseXY()[1] - start_position[1]),
                                 easyVector.get_poseXY()[0] - start_position[0])
         #(x, y) when DPoom head to right, x decreases (negatively increases)
+        # current_position and DAP's coordinates : straight(y), right(x)
         print('current_position :', current_position)
         if (path[0][i]-current_position[0])**2 + (path[1][i]-current_position[1])**2 < threshold_boundary**2:
             i = i+1
