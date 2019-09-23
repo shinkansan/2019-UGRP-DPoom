@@ -9,7 +9,8 @@ import rospy
 from matplotlib import pyplot as plt
 # from nav_msgs.msg import Odometry
 from geometry_msgs.msg import PoseWithCovarianceStamped
-from pathplanning.Astar import pathplanning
+from pathplanning import Astar
+#from easygo import 
 import numpy as np
 from time import sleep
 
@@ -50,7 +51,7 @@ def listener():
 
 def autodrive():
 
-	pathplanning(start, end, image_path="pathplanning/E5_223.jpg", verbose=0)
+	Astar.pathplanning(start, end, image_path="pathplanning/E5_223.jpg", verbose=0)
 
 if __name__ == '__main__':
 	verbose = 0  # if true, show matplot of odometry
@@ -69,10 +70,15 @@ if __name__ == '__main__':
 	position_idx = pose.convert2grid()
 	print("position in meters: " + str(pose.x) + ", " + str(pose.y))
 	print("current_position_idx: " + str(position_idx))
-	start = (position_idx[1] + ORIGIN[0], position_idx[0] + ORIGIN[1])
+	start = ((int)(position_idx[1] + ORIGIN[0]), (int)(position_idx[0] + ORIGIN[1]))
 	print("idx on the map: " + str(start))
 	end = (10, 37)
 
-	pathplanning(start, end, image_path="pathplanning/E5_223.jpg", verbose=1)
+	final_path = Astar.pathplanning(start, end, image_path="pathplanning/E5_223.jpg", verbose=0) #press Q to quit
+	for i,node in enumerate(final_path):
+		final_path[i] = [node[0] - ORIGIN[0], node[1] - ORIGIN[1]]  # change coordinates and calculate relative path. On the path image, downward(x) and right(y). Because the final coordinates of all module have [robotRight(x), robotStraight(y)].
+	#print(final_path)
+	final_path_meter = Astar.convert2meter(final_path)
+	print(final_path_meter)
 	
 	
