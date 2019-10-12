@@ -44,6 +44,7 @@ def Conversion(target): # 180 system to 360 system
     return target # What we want is --> CW 0 ~  360 System
 
 def odom_callback(msg):
+    #print('hello')
     global PoseX
     global PoseY
     PoseX = float(msg.pose.pose.position.x)
@@ -81,10 +82,10 @@ def twist (msg):
 
 def imuThread():
     print('Worker On')
-    try:
-        imu2angle.init()
-    except:
-        pass
+    imu2angle.init()
+    print('thread re1')
+
+
 
 
 print('[easyVector INIT]')
@@ -113,7 +114,7 @@ def get_steer_Value(desiredAngle, speed=1):
     ###SHinsegye
     ###
     desiredAngle=Conversion(desiredAngle)
-    print('Converted desiredAngle :', desiredAngle)
+    #print('Converted desiredAngle :', desiredAngle)
     ###
     optimalDegree = min([float(desiredAngle) - float(current_Angle),
                 -360+(float(desiredAngle) - float(current_Angle)),
@@ -125,7 +126,7 @@ def get_steer_Value(desiredAngle, speed=1):
 
 
 ###
-    print('steer :', steer)
+    #print('steer :', steer)
 ###
     '''
     if -1*Magic_Value > steer:
@@ -142,7 +143,10 @@ def get_steer_Value(desiredAngle, speed=1):
 def get_angle():
     return(current_Angle)
 
-
+def subThread():
+    sub_imu = rospy.Subscriber('/imu_yaw', Float32, yaw_callback)
+    odom_sub = rospy.Subscriber('odom', Odometry, odom_callback)
+    rospy.spin()
 
 if __name__ == '__main__':
     #================ Publisher & ROS Init =============================
@@ -152,7 +156,7 @@ if __name__ == '__main__':
     th.start()
     pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
     sub_imu = rospy.Subscriber('/imu_yaw', Float32, yaw_callback)
-    odom_sub = rospy.Subscriber('odom', Odometry, odom_callback)
+    odom_sub = rospy.Subscriber('/odom', Odometry, odom_callback)
      #topic publisher that allows you to move the sphero
     #sub_odom = rospy.Subscriber('/odom', Odometry, odom_callback) # the original name odom might be the same as other function.
     #sub_imu = rospy.Subscriber('/imu_yaw', Float32, yaw_callback)
@@ -196,11 +200,13 @@ if __name__ == '__main__':
 else: #For Dependent Running
 
     pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
-    sub_imu = rospy.Subscriber('/imu_yaw', Float32, yaw_callback)
-    odom_sub = rospy.Subscriber('odom', Odometry, odom_callback)
+
     th = threading.Thread(target=imuThread, name="imuthread")
     th.setDaemon(True)
     th.start()
+    th2 = threading.Thread(target=subThread, name="Subthread")
+    th2.setDaemon(True)
+    th2.start()
 
 
 def get_poseXY():

@@ -13,7 +13,6 @@ def main():
     try:
         print('EasyGo Activated')
         #rospy.init_node('robot_easygo', anonymous=False)
-
         global velocity_publisher
         velocity_publisher = rospy.Publisher('cmd_vel', Twist, queue_size=10)
         imu_sub = rospy.Subscriber('imu/yaw', Imu, imu_callback)
