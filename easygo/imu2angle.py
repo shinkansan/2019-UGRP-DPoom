@@ -30,14 +30,22 @@ class Imu2Angles:
         self.pub_imu_roll = _rospy.Publisher('/' + self.imu_name +'/roll', Float32, queue_size=1)
         self.pub_imu_pitch = _rospy.Publisher('/' + self.imu_name +'/pitch', Float32, queue_size=1)
         self.pub_imu_yaw = _rospy.Publisher('/imu_yaw', Float32, queue_size=1)
-        
+
         self.sub = _rospy.Subscriber(self.topic_name, Imu, self.process_imu_message, queue_size=1)
 
         rate = _rospy.Rate(self.rate)
-	_rospy.spin()
+        #print('hello')
+        #_rospy.spin()
+        #print('hello2')
+        #while not _rospy.is_shutdown():
+        #    print('hello')
+        #    rate.sleep()
+        _rospy.spin()
+        rate = _rospy.Rate(5000)
+        print('thread re3')
         while not _rospy.is_shutdown():
-
             rate.sleep()
+        print('thread re2')
 
     def process_imu_message(self, imuMsg):
         quaternion = (
@@ -66,7 +74,7 @@ class Imu2Angles:
         self.pub_imu_yaw_msg = Float32()
         self.pub_imu_yaw_msg.data = self.yaw
         self.pub_imu_yaw.publish(self.pub_imu_yaw_msg)
-    
+
 
 # Main function.
 if __name__ == '__main__':
@@ -82,5 +90,5 @@ def init():
 
     try:
         obj = Imu2Angles()
-    except:
-        pass
+    except Exception as rex:
+        print(rex);pass
