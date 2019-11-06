@@ -241,7 +241,7 @@ def pathplanning(start, end, image_path, verbose=0):
 
 	# Convert map image to binary list
     img = cv2.imread(image_path)
-    maze = img2binList(img, lenWidth=1000.0, GRID_SIZE=20, verbose=0)
+    maze = img2binList(img, lenWidth=3580, GRID_SIZE=20, verbose=0) #cm, 1000 for E5-223
     # Start and End point setting
 
     print("Start =", start, '\n', "End =", end)
@@ -289,7 +289,7 @@ def pathplanning(start, end, image_path, verbose=0):
 
 if __name__ == '__main__':
 
-    start = (30, 20)
-    end = (10, 37)
+    start = (70, 30)
+    end = (50, 37)
 
-    pathplanning(start, end, image_path="E5_223.jpg", verbose=0)
+    pathplanning(start, end, image_path="lobby.jpg", verbose=1)
