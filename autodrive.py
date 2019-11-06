@@ -6,6 +6,7 @@
 ##################################
 
 import rospy
+rospy.init_node('robot_mvs', anonymous = True)
 from matplotlib import pyplot as plt
 # from nav_msgs.msg import Odometry
 from geometry_msgs.msg import PoseWithCovarianceStamped
@@ -13,6 +14,9 @@ from pathplanning import Astar
 #from easygo import
 import numpy as np
 from time import sleep
+from tf.transformations import euler_from_quaternion
+import math
+from easygo import dap
 
 class RobotPose:
 	def __init__(self):
@@ -32,14 +36,30 @@ class RobotPose:
 		x, y = round(self.x/scale), - round(self.y/scale) # give a minus to 'y', because y-axis towars left side of robot
 		return (x, y)
 
+def rotate_origin_only(xy, radians):
+
+    """Only rotate a point around the origin (0, 0)."""
+    x, y = xy
+    xx = x * math.cos(radians) + y * math.sin(radians)
+    yy = -x * math.sin(radians) + y * math.cos(radians)
+
+    return float(xx), float(yy)
+
 def callback(data):
 	global pose
 	#print(str(data.pose.pose.position)+"\n")
 	_position = data.pose.pose.position
 	pose.x = _position.x
 	pose.y = _position.y
-	print(pose.x)
-	print(pose.y)
+	quaternion = (
+		data.pose.pose.orientation.x,
+		data.pose.pose.orientation.y,
+		data.pose.pose.orientation.z,
+		data.pose.pose.orientation.w)
+	(_roll, _pitch, pose.rot) = euler_from_quaternion(quaternion) # radians
+	#print(pose.x)
+	#print(pose.y)
+	print(pose.rot)
 	if verbose:
 		plt.scatter(pose.x, pose.y)
 		plt.hold(True)
@@ -47,7 +67,7 @@ def callback(data):
 
 
 def listener():
-	rospy.init_node('listener', anonymous=True)
+	#rospy.init_node('listener', anonymous=True)
 	rospy.Subscriber("/rtabmap/localization_pose", PoseWithCovarianceStamped, callback)
 	sleep(2)
 	#rospy.spin()
@@ -64,7 +84,8 @@ if __name__ == '__main__':
 	#print("init pose")
 	global pose
 	pose = RobotPose()
-	ORIGIN = (30, 20) # manually calculated. It means index of SLAN map origin on pathplanning binary maze
+	ORIGIN = (82, 10) # manually calculated. It means index of SLAN map origin on pathplanning binary maze
+	# E5-223, (32,25)
 
 	#print(pose.convert2grid())
 
@@ -82,10 +103,16 @@ if __name__ == '__main__':
 	print("current_position_idx: " + str(position_idx))
 	start = ((int)(position_idx[1] + ORIGIN[0]), (int)(position_idx[0] + ORIGIN[1]))
 	print("idx on the map: " + str(start))
-	end = (10, 37)
-	final_path = Astar.pathplanning(start, end, image_path="pathplanning/E5_223.jpg", verbose=1) #press Q to quit
+	end = (50, 37)
+	final_path = Astar.pathplanning(start, end, image_path="pathplanning/lobby.jpg", verbose=0) #press Q to quit
 	for i,node in enumerate(final_path):
-		final_path[i] = [node[0] - ORIGIN[0], node[1] - ORIGIN[1]]  # change coordinates and calculate relative path. On the path image, downward(x) and right(y). Because the final coordinates of all module have [robotRight(x), robotStraight(y)].
+		final_path[i] = [node[0] - start[0], node[1] - start[1]]  # change coordinates and calculate relative path. On the path image, downward(x) and right(y). Because the final coordinates of all module have [robotRight(x), robotStraight(y)].
 	#print(final_path)
 	final_path_meter = Astar.convert2meter(final_path)
+	print("before rotate")
 	print(final_path_meter)
+	for idx, node in enumerate(final_path_meter):
+		final_path_meter[idx] = rotate_origin_only(node, pose.rot)
+	print("after rotate")
+	print(final_path_meter)
+	dap.dap(final_path_meter, velRobot = 0.5, verbose=0)
