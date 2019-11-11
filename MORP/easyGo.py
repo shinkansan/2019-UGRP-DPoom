@@ -13,7 +13,6 @@ def main():
     try:
         print('EasyGo Activated')
         #rospy.init_node('robot_easygo', anonymous=False)
-
         global velocity_publisher
         velocity_publisher = rospy.Publisher('cmd_vel', Twist, queue_size=10)
         imu_sub = rospy.Subscriber('imu/yaw', Imu, imu_callback)
@@ -30,7 +29,7 @@ def printv(text, verbose):
 
 def stop(verbose=0):
     #Starts a new node
-    rospy.init_node('robot_mvs', anonymous=True)
+    #rospy.init_node('robot_mvs', anonymous=True)
     velocity_publisher = rospy.Publisher('cmd_vel', Twist, queue_size=10)
     vel_msg = Twist()
     vel_msg.linear.x=0
@@ -46,7 +45,7 @@ def stop(verbose=0):
 
 def mvRotate(speed, angle, clockwise, verbose=0):
     #Starts a new node
-    rospy.init_node('robot_mvs', anonymous=True)
+    #rospy.init_node('robot_mvs', anonymous=True)
     #velocity_publisher = rospy.Publisher('cmd_vel', Twist, queue_size=10)
     vel_msg = Twist()
 
@@ -93,14 +92,14 @@ def mvRotate(speed, angle, clockwise, verbose=0):
     printv('STOP', verbose)
 
 def mvCurve(x, y, verbose=0):
-    rospy.init_node('robot_mvs', anonymous=True)
+    #rospy.init_node('robot_mvs', anonymous=True)
     vel_msg = Twist()
-    vel_msg.linear.x= x
+    vel_msg.linear.x= x   ###??? x == Robot_speed
     vel_msg.angular.z=y
-    velocity_publisher.publish(vel_msg)
+    velocity_publisher.publish(vel_msg)     ###positive -> clockwise?
 def mvStraight(speed, angle, verbose=0):
     #Starts a new node
-    rospy.init_node('robot_mvs', anonymous=True)
+    #rospy.init_node('robot_mvs', anonymous=True)
     vel_msg = Twist()
     angular_speed = speed*2*PI/360
     relative_angle = angle*2*PI/360
