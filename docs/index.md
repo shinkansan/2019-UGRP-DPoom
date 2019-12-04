@@ -5,7 +5,7 @@
 
 ---
 
->__2019년 말까지는 해당 소스코드는 비공개 상태 예정입니다.__
+>__2019/12/5 We opened our github repos to public!!.__
 
 ## 개발 소개 ![build_status](https://img.shields.io/badge/build-WIP-yellow.svg)
 > "길을 찾는 귀여운 소형 자율 주행로봇" <br/>
