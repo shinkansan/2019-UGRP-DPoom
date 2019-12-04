@@ -10,6 +10,7 @@ c : speed down 0.2
 x : speed default 5
 '''
 import rospy
+rospy.init_node('robot_easygo', anonymous=False)
 import math
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import Imu

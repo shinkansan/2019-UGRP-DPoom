@@ -1,6 +1,7 @@
 import rospy
-rospy.init_node('robot_mvs', anonymous = True)
+#rospy.init_node('robot_mvs', anonymous = True)
 import easyGo
+
 import easyVector
 import math
 import matplotlib.pyplot as plt
@@ -8,13 +9,15 @@ import cv2
 stopper_sender = True
 steer = cv2.imread('steering_wheel_image.jpg.png', 0)
 rows, cols = steer.shape
-
+rospy.set_param('/dap_handle', False)
 #######################################################
 ###########Sample Value for Test!!!!!##################
 FlagMORP = False
-threshold_boundary = 0.2
+threshold_boundary = 0.5 # 0.2
 start_position = (0, 0)
 PI = 3.1415926535897
+i=0
+init_path = 0
 #######################################################
 #######################################################
 
@@ -28,17 +31,42 @@ def Steer_Visualization(desired_steer):     #steer visualization
     cv2.imshow("steering wheel", dst)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         easyGo.stop()
-        input()
+        #input()
+
+def closest_pt():
+    #####After MORP, head to closest pt#####
+
+    global i, init_path, start_position
+    print('cloeset pt update  | prev : ', i)
+    current_position = get_current_pose(start_position)
+
+    mindis = 1000
+    closest_index = i
+    try:
+        for j in range(i, len(init_path)):
+            if (init_path[j][0]-current_position[0])**2 + (init_path[j][1]-current_position[1])**2 < mindis:
+                mindis = (init_path[j][0]-current_position[0])**2 + (init_path[j][1]-current_position[1])**2
+                closest_index = j
+        i=closest_index
+        print('after : ', i)
+    except Exception as ex:
+        print('closest pt error', ex)
+        pass
+    #return closest_index
 
 def dap(path, velRobot=0.1, verbose=0):     # path is 2D array (x, y)
-    global start_position
-    i=0
+    global start_position, init_path
+    init_path = path
+    global i, threshold_boundary
     while(True):
-        #print('thread re1fuck')
+        print('thread re1fuck')
+        if rospy.get_param('/point_init'):
+            #closest_pt()
+            rospy.set_param('/point_init', False)
         if i==0 or FlagMORP:     # when just running code or we should search new path(by MORP algorithm)
             while(True):     # at first time, get_poseXY() == (0, 0)
                 start_position = easyVector.get_poseXY()[:]   # x axis == forward
-                print(start_position, easyVector.get_angle())
+                #print(start_position, easyVector.get_angle())
                 if start_position != (0.0,0.0):
                     break
             if verbose: # plot current robot position
@@ -51,8 +79,7 @@ def dap(path, velRobot=0.1, verbose=0):     # path is 2D array (x, y)
 				plt.xlim(-1, 1.3)
 				plt.ylim(-2, 2)
 				plt.hold(True)
-        current_position = (-(easyVector.get_poseXY()[1] - start_position[1]),
-                                easyVector.get_poseXY()[0] - start_position[0])
+        current_position = get_current_pose(start_position)
         #(x, y) when DPoom head to right, x decreases (negatively increases)
         # current_position and DAP's coordinates : straight(y), right(x)
         #print('current_position :', current_position)
@@ -75,13 +102,15 @@ def dap(path, velRobot=0.1, verbose=0):     # path is 2D array (x, y)
             plt.hold(True)
             plt.pause(0.05)
             #plt.show()
-
+def get_current_pose(start_position):
+    return((-(easyVector.get_poseXY()[1] - start_position[1]),
+                            easyVector.get_poseXY()[0] - start_position[0]))
 #############################################################################
 
 def easy_drive(goal_x, goal_y, realposition, velRobot):  #realposition == current_position(x, y)
     Kp = 1.7375 / 10
     current_angle = easyVector.get_angle()    ##y_axis == 0 degree, CW -> 0 ~ +180 degree
-    print('current_angle :', current_angle)
+    #print('current_angle :', current_angle)
     if goal_y-realposition[1]>=0 :   # pi/2 <= desired_angle <= pi/2
         desired_angle = -math.atan2(goal_x-realposition[0],
                                             goal_y-realposition[1])*180/PI
@@ -92,9 +121,10 @@ def easy_drive(goal_x, goal_y, realposition, velRobot):  #realposition == curren
                                             goal_y-realposition[1])*180/PI
         #print('desired_angle :', desired_angle)
         desired_steer = easyVector.get_steer_Value(desired_angle, velRobot)
-    print('desired_angle :', desired_angle)
-    easyGo.stopper = stopper_sender
-    easyGo.mvCurve(velRobot, desired_steer)
+    #print('desired_angle :', desired_angle)
+    if rospy.get_param('/dap_handle'):
+        easyGo.mvCurve(velRobot, desired_steer)
+
 
     ###############Steer visualization###############
     Steer_Visualization(desired_steer)
@@ -131,6 +161,6 @@ if __name__ == '__main__':
     '''
 
     test_path = [[0, 0], [0.5, 0], [1, 0], [1, 0.5], [1, 1], [0.5, 1], [0, 1], [0, 0.5], [0, 0]]
-    print('test')
+    #print('test')
     # velRobot = 0.1
     dap(test_path, verbose=1)

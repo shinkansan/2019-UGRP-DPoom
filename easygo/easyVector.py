@@ -22,7 +22,7 @@ from sensor_msgs.msg import Imu
 import threading
 import easyGo
 import imu2angle
-
+print('fuck1')
 
 global current_Angle, last_Angle
 global desired_Angle
