@@ -5,7 +5,7 @@ import easyVector
 import math
 import matplotlib.pyplot as plt
 import cv2
-
+stopper_sender = True
 steer = cv2.imread('steering_wheel_image.jpg.png', 0)
 rows, cols = steer.shape
 
@@ -17,6 +17,10 @@ start_position = (0, 0)
 PI = 3.1415926535897
 #######################################################
 #######################################################
+
+
+easyGo.stopper = True
+
 
 def Steer_Visualization(desired_steer):     #steer visualization
     M = cv2.getRotationMatrix2D((cols / 2, rows / 2), desired_steer*20, 1)
@@ -89,7 +93,8 @@ def easy_drive(goal_x, goal_y, realposition, velRobot):  #realposition == curren
         #print('desired_angle :', desired_angle)
         desired_steer = easyVector.get_steer_Value(desired_angle, velRobot)
     print('desired_angle :', desired_angle)
-    #easyGo.mvCurve(velRobot, desired_steer)
+    easyGo.stopper = stopper_sender
+    easyGo.mvCurve(velRobot, desired_steer)
 
     ###############Steer visualization###############
     Steer_Visualization(desired_steer)

@@ -9,6 +9,8 @@ import time
 PI = 3.1415926535897
 Magic_value = 1.7375
 
+stopper = True #easyGo command ignore, False : ignore, True : pass
+
 def main():
     try:
         print('EasyGo Activated')
@@ -28,6 +30,7 @@ def printv(text, verbose):
             print(text)
 
 def stop(verbose=0):
+	if stopper == False: return
     #Starts a new node
     rospy.init_node('robot_mvs', anonymous=True)
     velocity_publisher = rospy.Publisher('cmd_vel', Twist, queue_size=10)
@@ -44,6 +47,7 @@ def stop(verbose=0):
 
 
 def mvRotate(speed, angle, clockwise, verbose=0):
+	if stopper == False: return
     #Starts a new node
     rospy.init_node('robot_mvs', anonymous=True)
     #velocity_publisher = rospy.Publisher('cmd_vel', Twist, queue_size=10)
@@ -92,12 +96,14 @@ def mvRotate(speed, angle, clockwise, verbose=0):
     printv('STOP', verbose)
 
 def mvCurve(x, y, verbose=0):
+	if stopper == False: return
     rospy.init_node('robot_mvs', anonymous=True)
     vel_msg = Twist()
     vel_msg.linear.x= x   ###??? x == Robot_speed
     vel_msg.angular.z=y
     velocity_publisher.publish(vel_msg)     ###positive -> clockwise?
 def mvStraight(speed, angle, verbose=0):
+	if stopper == False: return
     #Starts a new node
     rospy.init_node('robot_mvs', anonymous=True)
     vel_msg = Twist()
