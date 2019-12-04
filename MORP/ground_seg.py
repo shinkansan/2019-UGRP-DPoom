@@ -19,39 +19,41 @@ import cv2
 import matplotlib.pyplot as plt
 import math
 import time
+import banner
 
 from sensor_msgs.msg import Image
 import rospy
-rospy.init_node('robot_mvs', anonymous=False)
-import easyGo as easyGo
+#rospy.init_node('robot_mvs', anonymous=False)
+from easygo import easyGo
 from std_msgs.msg import String
 from cv_bridge import CvBridge, CvBridgeError
 import threading
 from time import sleep
 
 global depth_scale, ROW, COL
+global currentStatus
 
 #size of images
 COL= 480
 ROW = 640
 
 #ROBOT MOVE
-SPEED = 0.8
-ROTATE_SPEED = 15
+SPEED = 0.4
+ROTATE_SPEED = 35
 
 VERTICAL_CORRECTION = 0.15 #0.45  #parameter of correction for parabola to linear
 WARP_PARAM = 0.45  #value should be 0.0 ~ 1.0. Bigger get more warped. 0.45
 GRN_ROI = 322 #The index of col that want to consider as ground ROI 400 300
 ZOOM_PARAM = 0.15 #Force calibrating the depth image to match the color image 0.15 0.205
-UNAVAILABLE_THRES = 200 #The index of col that is threshold of unavailable virtual lane
+UNAVAILABLE_THRES = 400 #The index of col that is threshold of unavailable virtual lane
 ROBOT_WIDTH_LIST = [2,3,4,5]
 ROBOT_LEFT = 1
 ROBOT_RIGHT = 6
-
+currentStatus = ""
 font = cv2.FONT_HERSHEY_SCRIPT_SIMPLEX
 fontScale = 1.5
 yellow = (0, 255, 255)
-
+handle_easy = True
 depth_image_raw = 0
 color_image_raw = 0
 
@@ -187,6 +189,8 @@ def verticalGround(depth_image2, images, numCol, plot):
 		cv2.line(images, (numLine, ground_center_idx[-1]), (numLine, COL), (0, 255, 0), 5) #Draw a green line.
 
 	try:
+
+		#pass
 		# Apply colormap on depth image (image must be converted to 8-bit per pixel first)5
 		cv2.circle(images, (numLine, ground_center_idx[0]), 5, (255, 255, 255), 10)
 		cv2.putText(images, str(round(abs_x[ground_center_idx[0]],2)) + "m", (numLine, COL - 100), font, fontScale, yellow, 2)
@@ -280,10 +284,10 @@ def GoEasy(direc):
 	if direc == 0:
 		easyGo.mvCurve(-SPEED, 0)
 	elif direc == 1:
-		print("COME HERE")
+		#print("COME HERE")
 		easyGo.mvCurve(SPEED, 0)
 	elif direc == 2:
-		print("COME HERE2")
+		#print("COME HERE2")
 		easyGo.mvRotate(ROTATE_SPEED, -1, False)
 	elif direc == 3:
 		easyGo.mvRotate(ROTATE_SPEED, -1, True)
@@ -330,11 +334,11 @@ class image_converter:
 		except CvBridgeError as e:
 			print(e)
 '''
-
+direc = 0
 
 def main():
 	# Configure depth and color streams
-	global depth_scale, ROW, COL, GRN_ROI, bridge
+	global depth_scale, ROW, COL, GRN_ROI, bridge, direc
 	fpsFlag = False
 	numFrame = 0
 	fps = 0.0
@@ -378,7 +382,11 @@ def main():
 	#COL=720, ROW=1280
 	depth_scale = 0.0010000000474974513
 	startTime = time.time()
+	abcd = 0
 	while True:
+		#print(abcd)
+		abcd+=1
+		print('MORP Wokring')
 		#try:
 		#if depth_image_raw == None: continue
 		# Wait for a coherent pair of frames: depth and color
@@ -398,37 +406,48 @@ def main():
 
 		# first step
 
-		global depth_image_raw, color_image_raw
+		global depth_image_raw, color_image_raw, currentStatus, handle_easy
 		if type(depth_image_raw) == type(0) or type(color_image_raw) == type(0):
 			sleep(0.1)
+			##babbanner(bad=True)
 			continue
+		print('MORP CYCLE : ',abcd)
+		#banner("True")
 		depth_image, color_image = preGroundSeg(depth_image_raw, color_image_raw)
 		# last step
 		color_image, virtual_lane_available = GroundSeg(depth_image, color_image)
 		# handling lane
 		cv2.line(color_image, (0, UNAVAILABLE_THRES), (ROW, UNAVAILABLE_THRES), (0, 255, 0), 2)
 		direc = LaneHandling(virtual_lane_available, UNAVAILABLE_THRES, 1)
+		if direc == 1:
+			currentStatus = "NO OBSTACLE"
+			rospy.set_param('/point_init', True)
+		else:
+			currentStatus = "YES OBSTACLE"
 		print(direc)
-		GoEasy(direc)
+		if handle_easy:
+			easyGo.stopper=handle_easy
+			GoEasy(direc)
+			print('Morp easyGo stoppper :: ' + str(easyGo.stopper))
 		#LaneHandling(virtual_lane_available, UNAVAILABLE_THRES, 1)
 
 		# Stack both images horizontally
 		# images = np.hstack((color_image, depth_colormap))
 
 		# Show images
-		cv2.namedWindow('RealSense', cv2.WINDOW_AUTOSIZE)
-		cv2.imshow('RealSense', color_image)
-		if cv2.waitKey(1) == 27: #esc
-			easyGo.stop()
-			break
+		#cv2.namedWindow('RealSense', cv2.WINDOW_AUTOSIZE)
+		#cv2.imshow('RealSense', color_image)
+		#if cv2.waitKey(1) == 27: #esc
+		#	easyGo.stop()
+		#	break
 
 		# FPS
 		numFrame += 1
 
-		if cv2.waitKey(33) == ord('f'):
-			endTime = time.time()
-			fps = round((float)(numFrame) / (endTime - startTime), 2)
-			print("###FPS = " + str(fps) + " ###")
+		#if cv2.waitKey(1) == ord('f'):
+		#	endTime = time.time()
+		#	fps = round((float)(numFrame) / (endTime - startTime), 2)
+		#	print("###FPS = " + str(fps) + " ###")
 
 		#except Exception:
 		#	print("Error")
@@ -440,4 +459,5 @@ def main():
 	easyGo.stop()
 
 if __name__ == "__main__":
+	rospy.init_node('robot_mvs', anonymous=False)
 	main()
