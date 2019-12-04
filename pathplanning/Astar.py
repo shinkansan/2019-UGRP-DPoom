@@ -85,7 +85,7 @@ def img2binList(img, lenWidth, GRID_SIZE=50, verbose=0):
         cv2.waitKey(0)
     maze = convert2list(resized_gray)
     my_maze = np.array(maze)
-    solution = pyfmm.march(my_maze == 1, batch_size=10000)[0] # NOTE : white area means walkable area
+    solution = pyfmm.march(my_maze == 1, batch_size=100000)[0] # NOTE : white area means walkable area
     DISTANCECOSTMAP = solution
 
     # cv2.destroyAllWindows()
@@ -98,10 +98,10 @@ def distcost(x, y, safty_value=2):
     # which leads to eliminate the meaning of distance cost.
     max_distance_cost = np.max(DISTANCECOSTMAP)
     distance_cost = max_distance_cost-DISTANCECOSTMAP[x][y]
-    if distance_cost > (max_distance_cost/safty_value):
-        distance_cost = 1000
-        return distance_cost
-    return 50 * distance_cost
+    #if distance_cost > (max_distance_cost/safty_value):
+    #    distance_cost = 1000
+    #    return distance_cost
+    return 50 * distance_cost # E5 223 - 50
 
 
 def random_walkable_position(x_range, y_range, rigidity=1):
@@ -223,7 +223,7 @@ def astar(maze, start, end):
                 child.h = (((child.position[0] - end_node.position[0]) ** 2) + ((child.position[1] - end_node.position[1]) ** 2))
                 # New cost 'distance cost' as dc
                 # The weight of the distance cost has been set to make the path at least 3 grid away from the obstacles.
-                child.dc = distcost(child.position[0], child.position[1])
+                child.dc = 5*distcost(child.position[0], child.position[1])
                 child.f = child.g + child.h + child.dc
 
             # Child is already in the open list
@@ -241,7 +241,7 @@ def pathplanning(start, end, image_path, verbose=0):
 
 	# Convert map image to binary list
     img = cv2.imread(image_path)
-    maze = img2binList(img, lenWidth=3580, GRID_SIZE=20, verbose=0) #cm, 1000 for E5-223
+    maze = img2binList(img, lenWidth=3580, GRID_SIZE=20, verbose=0) #cm, 1000 for E5-223 lobby 3580
     # Start and End point setting
 
     print("Start =", start, '\n', "End =", end)
@@ -288,8 +288,10 @@ def pathplanning(start, end, image_path, verbose=0):
     return path
 
 if __name__ == '__main__':
+    import rospy
+    start = (100, 55)
+    rospy.set_param('/start_x', start[0])
+    rospy.set_param('/start_y', start[1])
+    end = (100, 144) # (45,33) green sofa (87,76) desk (70, 115) tree (75, 160) dosirak (100,144) gs
 
-    start = (70, 30)
-    end = (50, 37)
-
-    pathplanning(start, end, image_path="lobby.jpg", verbose=1)
+    pathplanning(start, end, image_path="lobby3.jpg", verbose=1)
