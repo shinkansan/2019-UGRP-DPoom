@@ -18,6 +18,8 @@ Below chart shows the difference by applying distance cost to actual pathplannin
 |---|---|
 |![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/img/lobby_test_withoutDC.PNG)|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/img/lobby_test_withDC.PNG)|
 
+You can try this pathplanning in 'lobby_obtimization_sample.py.
+
 ## Dependency
 ```bash
 import matplotlib.pyplot as plt
