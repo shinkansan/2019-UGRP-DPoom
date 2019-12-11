@@ -12,9 +12,11 @@ High distance cost means that the current node is nearing the obstacles.
 Therefore, because the original A* algorithm select nodes with minimum cost, the generated path have tendency to be far away from the obstacles.  
 (For deriving distance cost, Fast marching methond was used.)
 
+Below chart shows the difference by applying distance cost to actual pathplanning. 
+
 | Without distance cost | With distance cost |
 |---|---|
-|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/img/without_d_cost.PNG)|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/img/with_d_cost.PNG)|
+|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/img/lobby_test_withoutDC.PNG)|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/img/lobby_test_withDC.PNG)|
 
 ## Dependency
 ```bash
