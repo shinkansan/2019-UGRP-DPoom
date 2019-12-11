@@ -56,7 +56,16 @@ def distcost(x, y, safty_value=2):
   return distance_cost 
   # You can manually tune the weight of the distance cost by multiplying to the returning value.
 ```
-It calculate the distance cost of the specific grid(x, y) using global variable __DISTANCECOSTMAP__. Large safty value make the path more away from the wall. However, if it is too large, almost every grid will have maximum distance cost(=1000) which leads to eliminate the meaning of distance cost. Therfore, this value should be manually tuned.
+It calculate the distance cost of the specific grid(x, y) using global variable __DISTANCECOSTMAP__.
+The node which is closer from the obstacles has the higher distance cost value.
+In this function, you can make several nodes around the obstacle as 'almostly not allowed nodes' by activate following three lines:
+```bash
+    #if distance_cost > (max_distance_cost/safty_value):
+    #    distance_cost = 1000
+    #    return distance_cost
+```
+Large safty value make more 'almostly not allowed nodes' nearing the obstacles. However, if it is too large, almost every grid will have maximum distance cost(=1000) which leads to eliminate the meaning of distance cost. Therfore, this value should be manually tuned.
+
 
 ### 3. astar
 ```bash
