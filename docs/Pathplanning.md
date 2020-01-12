@@ -12,9 +12,13 @@ High distance cost means that the current node is nearing the obstacles.
 Therefore, because the original A* algorithm select nodes with minimum cost, the generated path have tendency to be far away from the obstacles.  
 (For deriving distance cost, Fast marching methond was used.)
 
+Below chart shows the difference by applying distance cost to actual pathplanning. 
+
 | Without distance cost | With distance cost |
 |---|---|
-|![a](img/without_d_cost.png)|![a](img/with_d_cost.png)|
+|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/img/lobby_test_withoutDC.PNG)|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/img/lobby_test_withDC.PNG)|
+
+You can try this pathplanning in 'lobby_obtimization_sample.py.
 
 ## Dependency
 ```bash
@@ -48,7 +52,7 @@ Parameters: __lenWidth__ is the actual width of the map in _cm_ scale, and __GRI
 
 | Original Image (SLAM) | Cropped Image | Binary List | DISTANCECOSTMAP |
 |---|---|---|---|
-|![a](img/original_map_image.png)|![a](img/cropped_map_image.png)|![a](img/cropped_binary_list.png)|![a](img/DISTANCECOSTMAP.png)|
+|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/img/original_map_image.PNG)|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/img/cropped_map_image.PNG)|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/img/cropped_binary_list.PNG)|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/img/DISTANCECOSTMAP.PNG)|
 
 ### 2. distcost
 ```bash
@@ -56,7 +60,16 @@ def distcost(x, y, safty_value=2):
   return distance_cost 
   # You can manually tune the weight of the distance cost by multiplying to the returning value.
 ```
-It calculate the distance cost of the specific grid(x, y) using global variable __DISTANCECOSTMAP__. Large safty value make the path more away from the wall. However, if it is too large, almost every grid will have maximum distance cost(=1000) which leads to eliminate the meaning of distance cost. Therfore, this value should be manually tuned.
+It calculate the distance cost of the specific grid(x, y) using global variable __DISTANCECOSTMAP__.
+The node which is closer from the obstacles has the higher distance cost value.
+In this function, you can make several nodes around the obstacle as 'almostly not allowed nodes' by activate following three lines:
+```bash
+    #if distance_cost > (max_distance_cost/safty_value):
+    #    distance_cost = 1000
+    #    return distance_cost
+```
+Large safty value make more 'almostly not allowed nodes' nearing the obstacles. However, if it is too large, almost every grid will have maximum distance cost(=1000) which leads to eliminate the meaning of distance cost. Therfore, this value should be manually tuned.
+
 
 ### 3. astar
 ```bash
@@ -65,4 +78,5 @@ def astar(maze, start, end):
 ```
 It generate the path list in grid scale. The input _maze_ is type of binary list which is the returning form of __img2binList__ function. Return value should be reversed because A* algorithm collect the elements of the path from the end node to start node.
 
-<center><img src="img/E5_223_path.png" alt="drawing" width="480"/></center>
+<center><img src="https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/img/E5_223_path.PNG" alt="drawing" width="480"/></center>
+
