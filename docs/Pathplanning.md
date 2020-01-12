@@ -16,7 +16,7 @@ Below chart shows the difference by applying distance cost to actual pathplannin
 
 | Without distance cost | With distance cost |
 |---|---|
-|![a](img/lobby_test_withoutDC.PNG)|![a](img/lobby_test_withDC.PNG)|
+|![a](img/lobby_test_withoutDC.png)|![a](img/lobby_test_withDC.png)|
 
 You can try this pathplanning in 'lobby_obtimization_sample.py.
 
