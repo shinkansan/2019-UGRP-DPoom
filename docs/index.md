@@ -13,7 +13,7 @@
 
 Introduction Video
 <div align="center">
-  <a href="https://www.youtube.com/9KRy7pCXqaM"><img src="https://img.youtube.com/vi/9KRy7pCXqaM/0.jpg" alt="Introduction Video"></a>
+  <a href="https://www.youtube.com/watch?v=9KRy7pCXqaM&feature=youtu.be"><img src="https://img.youtube.com/vi/9KRy7pCXqaM/0.jpg" alt="Introduction Video"></a>
 </div>
 
 <p float="left">
