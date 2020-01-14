@@ -11,6 +11,10 @@
 > "길을 찾는 귀여운 소형 자율 주행로봇" <br/>
 >"__뎁스카메라__ 를 이용한 __독립형 완전자율__ 주행"
 
+Introduction Video
+<div align="center">
+  <a href="https://www.youtube.com/9KRy7pCXqaM"><img src="https://img.youtube.com/vi/9KRy7pCXqaM/0.jpg" alt="Introduction Video"></a>
+</div>
 
 <p float="left">
   <img src="gif/DPoom_temp.gif" alt="drawing" width="409"/>
