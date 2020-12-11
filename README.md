@@ -12,7 +12,7 @@ For further information, please visit our [page](https://shinkansan.github.io/20
 > "길을 찾는 귀여운 소형 자율 주행로봇" <br/>
 >"__뎁스카메라__ 를 이용한 __독립형 완전자율__ 주행"
 
-Introduction Video
+Click below for introduction video.
 <div align="center">
   <a href="https://www.youtube.com/watch?v=9KRy7pCXqaM&feature=youtu.be"><img src="https://img.youtube.com/vi/9KRy7pCXqaM/0.jpg" alt="Introduction Video"></a>
 </div>
