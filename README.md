@@ -2,6 +2,9 @@
 ==============================
 For further information, please visit our [page](https://shinkansan.github.io/2019-UGRP-DPoom/)
 
+Single board computer Lattepanda Alpha based indoor mobile robot DPoom, with fully autonomous driving system using single RGB-D camera Intel Realsense D435i. 
+
+Keywards: Autonomy, SLAM, ROS, RGB-D, Low-end, Global path planning, Local path planning, path tracking, control, Human-Robot interaction
 2019 DGIST 소형자율주행로봇 플랫폼 구축 및 RGB-D 센서를 이용한 Full Automation 자율 주행 알고리즘 구축<br/>
 
 ---
