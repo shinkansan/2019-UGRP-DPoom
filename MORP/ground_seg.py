@@ -128,7 +128,6 @@ def verticalGround(depth_image2, images, numCol, plot):
 			idx += 1
 			#print(idx)
 			continue
-			# print("FUCK")
 		# (abs(abs_x[ground_center_idx[i]] - abs_x[(720 - idx)]) < 0.4) and (
 
 
@@ -151,7 +150,6 @@ def verticalGround(depth_image2, images, numCol, plot):
 			groundCount += 1
 			hurdleCount = 0
 			# print(idx)
-			#print("FUCKFUCKFUCK")
 			idx += 5
 		elif hurdleCount > 3:
 			break
@@ -159,7 +157,7 @@ def verticalGround(depth_image2, images, numCol, plot):
 			hurdleCount += 1
 			idx += 10
 		#except:
-			#print("FOUND FUCKING NONE")
+			#print("FOUND NONE")
 
 	if plot:
 		print(abs_x[ground_center_idx[0]], abs_y[ground_center_idx[0]])
@@ -181,7 +179,6 @@ def verticalGround(depth_image2, images, numCol, plot):
 			pass
 
 	if groundCount < 3:
-		#print("FUCK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 		dead_end = COL
 		cv2.line(images, (numLine, 0), (numLine, ROW), (0, 0, 255), 5)  #Draw a red line when ground indexes is less than we want.
 	else:
@@ -353,7 +350,6 @@ def main():
 	realsense_listener = threading.Thread(target=listener)
 	realsense_listener.start()
 	#realsense_listener.join()
-	print("FUCK!!")
 
 
 	while 1:
