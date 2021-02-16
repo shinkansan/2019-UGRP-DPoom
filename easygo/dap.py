@@ -7,7 +7,7 @@ import math
 import matplotlib.pyplot as plt
 import cv2
 stopper_sender = True
-steer = cv2.imread('steering_wheel_image.jpg.png', 0)
+steer = cv2.imread('steering_wheel_image.jpg', 0)
 rows, cols = steer.shape
 rospy.set_param('/dap_handle', False)
 #######################################################
