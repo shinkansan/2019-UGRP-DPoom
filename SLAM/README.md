@@ -42,8 +42,8 @@ $ roslaunch realsense2_camera opensource_tracking_tk_online.launch
 ```
 You should download my launch file [launch/opensource_tracking_tk_online.launch](launch/opensource_tracking_tk_online.launch), and locate it in '/catkin_ws/src/realsense-ros/realsense2_camera/launch' directory. rtabmap will be launched and you can perform mapping by dragging D435i with your labtop. 
 
-<img src="/GIF/rtabmap.gif" alt="drawing" width="480"/>
-<img src="/GIF/rtabmap_mapping.gif" alt="drawing" width="480"/>
+<img src="/docs/gif/rtabmap.gif" alt="drawing" width="480"/>
+<img src="/docs/gif/rtabmap_mapping.gif" alt="drawing" width="480"/>
 
 I recommend to use 'rtabmapviz', as in my launch file. If you want to use 'rviz' to visualize, just change two parameters in the launch file.
 ```bash
@@ -54,7 +54,7 @@ I recommend to use 'rtabmapviz', as in my launch file. If you want to use 'rviz'
 ## Loop Closure
 rtabmap will perform loop closure automatically. 
 
-<img src="/GIF/rtabmap_loop_closure.gif" alt="drawing" width="480"/>
+<img src="/docs/gif/rtabmap_loop_closure.gif" alt="drawing" width="480"/>
 
 ## Save Map Data
 You can save your map data in pcd file while rtabmap is still running.
@@ -78,19 +78,19 @@ $ rosrun realsense2_camera opensource_tracking_tk_localization.launch
 ```
 The source is here [launch/opensource_tracking_tk_localizationl.launch](launch/opensource_tracking_tk_localizationl.launch) and you should put it to the ros package too.
 
-<img src="/GIF/rtabmap_localization.gif" alt="drawing" width="480"/>
+<img src="/docs/gif/rtabmap_localization.gif" alt="drawing" width="480"/>
 
 # Post-processing Position Data from Matching
 ## odom_listener
 The odometry data is published as name of '/rtabmap/odom' while rtabmap localization is running. It contains data as below:
 
-<img src="/img/rtabmap_odom.png" alt="drawing" width="320"/>
+<img src="/docs/img/rtabmap_odom.png" alt="drawing" width="320"/>
 
 __Since our path planning and driving modules (easySeries) requires (x,y) position of the robot, [odom_listener.py](odom_listener.py) is made for subscribing '/rtabmap/odom' and parsing it to position data.__ And I plot its trajactory using matplotlib.
 
 <p>
-  <img src="/img/odom_listener_plot.png" alt="drawing" width="320"/>
-  <img src="/img/E5-223_2D.png" alt="drawing" width="320"/>
+  <img src="/docs/img/odom_listener_plot.png" alt="drawing" width="320"/>
+  <img src="/docs/img/E5-223_2D.png" alt="drawing" width="320"/>
 </p>
 
 The left image is the result of traveling in my office while running pure localization of rtabmap. The right image is the 2D projection of created map. You can see that odometry provides really accurate position data. The position data describes relative location from the origin, and the unit is meter. As result of comparision, error of the data is just few centimeters. 
@@ -98,6 +98,6 @@ The left image is the result of traveling in my office while running pure locali
 # Field Test
 | Initializing First Pose | Localization While Robot Driving |
 |---|---|
-|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/GIF/SLAM_initialize_pose.gif)|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/GIF/SLAM_live_demo.gif)|
+|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/docs/gif/SLAM_initialize_pose.gif)|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/docs/gif/SLAM_live_demo.gif)|
 
 When the SLAM first launched, it initializes robot's first pose by matching the features on the pre-created SLAM map. You can see the results on the left. The live demo on the right is recorded on the DPoom. DPoom was controlled by keyboard input using [easyControl](/easygo/easyControl.py). The live demo shows that SLAM could perform real-time localization while the robot is actually driving. And the pose is published to the ROS.
