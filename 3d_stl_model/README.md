@@ -4,10 +4,10 @@
 ## 3D Modeling by Autodesk Inventor
 | Assembled view | Exploded view |
 |---|---|
-|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/img/Assembled_figure.png)|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/img/Exploded_figure.png)|
+|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/docs/img/Assembled_figure.png)|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/docs/img/Exploded_figure.png)|
 
 ## Assembly
-<img src="../GIF/Dpoom_Assembly_gif.gif" alt="drawing" width="720"/>
+<img src="/docs/gif/Dpoom_Assembly_gif.gif" alt="drawing" width="720"/>
 
 ## Required Number of printing
 fixing_pin; X 4 (+alpha) 
