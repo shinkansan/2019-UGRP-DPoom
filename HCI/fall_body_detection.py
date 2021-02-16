@@ -92,9 +92,6 @@ def verticalGround(depth_image2, images, numCol, plot):
             if abs_x[COL - idx] == None or abs_y[COL - idx] == None:
                 idx += 1
                 continue
-                # print("FUCK")
-            # (abs(abs_x[ground_center_idx[i]] - abs_x[(720 - idx)]) < 0.4) and (
-
 
             #To found ground indexes, we use differential. If variation dy/dx is lower than threshold, append it.
             ####################################################################################################
@@ -114,8 +111,6 @@ def verticalGround(depth_image2, images, numCol, plot):
                 cv2.circle(images, (numLine, (COL - idx)), 5, (0, 255, 0), 5)
                 groundCount += 1
                 hurdleCount = 0
-                # print(idx)
-                #print("FUCKFUCKFUCK")
                 idx += 5
             elif hurdleCount > 3:
                 break
@@ -123,11 +118,10 @@ def verticalGround(depth_image2, images, numCol, plot):
                 hurdleCount += 1
                 idx += 10
         except:
-            print("FOUND FUCKING NONE")
+            pass
 
     if plot:
         try:
-            # print(ground_center_idx[0])
             plt.plot(abs_x, abs_y)
             plt.scatter(abs_x[ground_center_idx[0]], abs_y[ground_center_idx[0]], color='r',
                         s=20)  # red point on start point of ground
@@ -142,7 +136,6 @@ def verticalGround(depth_image2, images, numCol, plot):
             pass
 
     if groundCount < 3:
-        #print("FUCK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         dead_end = COL
         cv2.line(images, (numLine, 0), (numLine, ROW), (0, 0, 255), 5)  #Draw a red line when ground indexes is less than we want.
     else:
@@ -150,7 +143,7 @@ def verticalGround(depth_image2, images, numCol, plot):
         cv2.line(images, (numLine, ground_center_idx[-1]), (numLine, COL), (0, 255, 0), 5) #Draw a green line.
 
     try:
-        # Apply colormap on depth image (image must be converted to 8-bit per pixel first)5
+        # Apply colormap on depth image (image must be converted to 8-bit per pixel first)
         cv2.circle(images, (numLine, ground_center_idx[0]), 5, (255, 255, 255), 10)
         cv2.putText(images, str(round(abs_x[ground_center_idx[0]],2)) + "m", (numLine, COL - 100), font, fontScale, yellow, 2)
     except:
@@ -253,11 +246,8 @@ def fall_body(frame, virtual_lane_available):
 def humanDetection(frame_1, frame_d, depth_intrin):
     global cascade, humanFlag, lower_cascade, upper_cascade
     height, width, _ = frame_1.shape
-    #print(height, width)
     frame_resized = cv2.resize(frame_1, dsize=((int)(width / 6), (int)(height / 6)))
 
-	#detections = cascade.detectMultiScale(frame_resized, 1.01, 2)
-    #print(frame_resized)
     try:
         detections = list(cascade.detectMultiScale(frame_resized[0], 1.01, 4, minSize=(10, 5)))
         detections.extend(list(lower_cascade.detectMultiScale(frame_resized, 1.01, 4, minSize=(10, 5))))
@@ -335,7 +325,6 @@ def main(verbose=0):
 
         frames = pipeline.wait_for_frames()
 
-        ###
         aligned_frames = align.process(frames)
         aligned_depth_frame = aligned_frames.get_depth_frame()
         aligned_color_frame = aligned_frames.get_color_frame()

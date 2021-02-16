@@ -8,6 +8,18 @@ For further information, please visit our [page](https://shinkansan.github.io/20
 
 2019 DGIST 소형자율주행로봇 플랫폼 구축 및 RGB-D 센서를 이용한 Full Automation 자율 주행 알고리즘 구축<br/>
 
+# Installation
+### [Follow installation guide here](installation_guide)
+
+# How to run
+## SLAM
+Mapping should be preceded before deploying robots. See [SLAM Page](SLAM/README.md).
+## Global path planning
+Using pcd map, the robot can plan global path using our FMM based modified A*. See [GPP Page](pathplanning/README.md).
+## Motion planning
+The robot can follow the generated path by motion planner. Our motion planner is using our real-time ground segmentation method named MORP. See [Motion Planning (MORP) Page](MORP/README.md).
+## Full autonomous driving
+RGB-D localization, global path planning and motion planning are integrated in one python script. Just run 
 ---
 
 >__2019/12/5 We opened our github repos to public!!.__

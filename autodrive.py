@@ -9,12 +9,9 @@
 ##################################
 
 import rospy
-#rospy.init_node('robot_mvs', anonymous=False)
 from matplotlib import pyplot as plt
-# from nav_msgs.msg import Odometry
 from geometry_msgs.msg import PoseWithCovarianceStamped
 from pathplanning import Astar
-#from easygo import
 import numpy as np
 from time import sleep
 from tf.transformations import euler_from_quaternion
@@ -28,8 +25,6 @@ verbose = 0
 
 class RobotPose:
 	def __init__(self):
-		#_data = rospy.wait_for_message("/rtabmap/localization_pose", PoseWithCovarianceStamped)
-		#_position = _data.pose.pose.position
 		self.x = 0.0
 		self.y = 0.0
 		self.rot = 0.0
@@ -55,7 +50,6 @@ def rotate_origin_only(xy, radians):
 
 def callback(data):
 	global pose
-	#print(str(data.pose.pose.position)+"\n")
 	_position = data.pose.pose.position
 	pose.x = _position.x
 	pose.y = _position.y
@@ -65,9 +59,6 @@ def callback(data):
 		data.pose.pose.orientation.z,
 		data.pose.pose.orientation.w)
 	(_roll, _pitch, pose.rot) = euler_from_quaternion(quaternion) # radians
-	#print(pose.x)
-	#print(pose.y)
-	#print(pose.rot)
 	if verbose:
 		plt.scatter(pose.x, pose.y)
 		plt.hold(True)
@@ -78,7 +69,6 @@ def listener():
 	#rospy.init_node('listener', anonymous=True)
 	rospy.Subscriber("/rtabmap/localization_pose", PoseWithCovarianceStamped, callback)
 	sleep(2)
-	#rospy.spin()
 
 def autodrive():
 
@@ -88,9 +78,6 @@ def autodrive():
 def d_main():
 	verbose = 0  # if true, show matplot of odometry
 
-	#_data = rospy.wait_for_message("/rtabmap/localization_pose", PoseWithCovarianceStamped, 15.0)
-	#rospy.spin()
-	#print("init pose")
 	global pose
 	global flagLocal
 	pose = RobotPose()
@@ -101,12 +88,10 @@ def d_main():
 
 	listener()
 	while True:
-		#print(pose.x)
-		#print(pose.y)
 		if pose.x != 0.0 and pose.y != 0.0:
 			flagLocal=False
 			break
-		#print()
+
 	flagLocal = True
 	print("listener up")
 

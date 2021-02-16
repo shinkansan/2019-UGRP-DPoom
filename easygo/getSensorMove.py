@@ -1,5 +1,4 @@
 #! /usr/bin/env python
-# TODO IMU Value doesn't retreie~~~~~ fuck fix this out next.....
 from time import sleep
 import signal
 import sys
@@ -25,7 +24,6 @@ def odom_callback(msg):
     rate.sleep()
 
 def imu_callback(msg):
-    # allez = Imu()
     print "------------------------------------------------"
     print "veloc angular z = " + str(msg.angular_velocity.z)
     print "veloc angular y = " + str(msg.angular_velocity.y)
@@ -36,8 +34,7 @@ def imu_callback(msg):
 def yaw_callback(msg):
     global current_Angle, last_Angle
     current_Angle = float(str(msg)[6:12])
-    if type(current_Angle) != float:
-        print("GAESSIBAL!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+
     last_Angle = current_Angle
     print(type(current_Angle))
     rate.sleep()
@@ -58,11 +55,10 @@ rate = rospy.Rate(5000)
 Kp = 1.7375 / 45
 
 while not rospy.is_shutdown():
-    cv2.imshow("asdf",0)
+    cv2.imshow("img",0)
     k = cv2.waitKey(1)
     if k == ord('k'):
         easyGo.stop()
-        print('FUCKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK')
         cv2.waitKey(0)
         break
 

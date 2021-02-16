@@ -23,7 +23,6 @@ import banner
 
 from sensor_msgs.msg import Image
 import rospy
-#rospy.init_node('robot_mvs', anonymous=False)
 from easygo import easyGo
 from std_msgs.msg import String
 from cv_bridge import CvBridge, CvBridgeError
@@ -66,8 +65,6 @@ def Topview(src):
 
 	corners = np.float32([[row*WARP_PARAM/2, 0], [row*(1-WARP_PARAM/2), 0], [0, col], [row, col]])
 	warp_corners = np.float32([[0, 0], [ROW, 0], [0, COL], [ROW, COL]])
-	#print(corners)
-	#print(warp_corners)
 
 	trans_matrix = cv2.getPerspectiveTransform(corners, warp_corners)
 
@@ -123,13 +120,11 @@ def verticalGround(depth_image2, images, numCol, plot):
 	groundCount = 0  #Count points that considered as ground
 	hurdleCount = 0  #Count points that not considered as ground subsequently. Initialize it to zero when found ground.
 	while idx < COL:
-		#try:
 		if abs_x[COL - idx] == None or abs_y[COL - idx] == None:
 			idx += 1
 			#print(idx)
 			continue
-			# print("FUCK")
-		# (abs(abs_x[ground_center_idx[i]] - abs_x[(720 - idx)]) < 0.4) and (
+
 
 
 		#To found ground indexes, we use differential. If variation dy/dx is lower than threshold, append it.
@@ -150,23 +145,20 @@ def verticalGround(depth_image2, images, numCol, plot):
 			cv2.circle(images, (numLine, (COL - idx)), 5, (0, 255, 0), 5)
 			groundCount += 1
 			hurdleCount = 0
-			# print(idx)
-			#print("FUCKFUCKFUCK")
+
 			idx += 5
 		elif hurdleCount > 3:
 			break
 		else:
 			hurdleCount += 1
 			idx += 10
-		#except:
-			#print("FOUND FUCKING NONE")
+
 
 	if plot:
 		print(abs_x[ground_center_idx[0]], abs_y[ground_center_idx[0]])
 		print(abs_x[ground_center_idx[-1]], abs_y[ground_center_idx[-1]])
 		print((abs_x[ground_center_idx[-1]]-abs_x[ground_center_idx[0]])/(abs_y[ground_center_idx[-1]]-abs_y[ground_center_idx[0]]))
 		try:
-			# print(ground_center_idx[0])
 			plt.plot(abs_x, abs_y)
 			plt.scatter(abs_x[ground_center_idx[0]], abs_y[ground_center_idx[0]], color='r',
 						s=20)  # red point on start point of ground
@@ -181,7 +173,6 @@ def verticalGround(depth_image2, images, numCol, plot):
 			pass
 
 	if groundCount < 3:
-		#print("FUCK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 		dead_end = COL
 		cv2.line(images, (numLine, 0), (numLine, ROW), (0, 0, 255), 5)  #Draw a red line when ground indexes is less than we want.
 	else:
@@ -314,26 +305,6 @@ def listener():
 	# spin() simply keeps python from exiting until this node is stopped
 	rospy.spin()
 
-'''
-class image_converter:
-	def __init__(self):
-		self.bridge = CvBridge()
-		self.image_sub = rospy.Subscriber("image_topic",Image,self.callback)
-	def callback(self,data):
-		try:
-			cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
-		except CvBridgeError as e:
-			print(e)
-		(rows,cols,channels) = cv_image.shape
-		if cols > 60 and rows > 60 :
-			cv2.circle(cv_image, (50,50), 10, 255)
-		cv2.imshow("Image window", cv_image)
-		cv2.waitKey(3)
-		try:
-			self.image_pub.publish(self.bridge.cv2_to_imgmsg(cv_image, "bgr8"))
-		except CvBridgeError as e:
-			print(e)
-'''
 direc = 0
 
 def main():
@@ -343,16 +314,10 @@ def main():
 	numFrame = 0
 	fps = 0.0
 
-	#easyGo.mvStraight(0, -1)
-
-	#####
-	#ic = image_converter()
-	#####
 	bridge = CvBridge()
 
 	realsense_listener = threading.Thread(target=listener)
 	realsense_listener.start()
-	#realsense_listener.join()
 	print("FUCK!!")
 
 
@@ -365,16 +330,6 @@ def main():
 			config.enable_stream(rs.stream.depth, ROW, COL, rs.format.z16, 30)
 			config.enable_stream(rs.stream.color, ROW, COL, rs.format.bgr8, 30)
 			'''
-
-
-			# Start streaming
-
-			#profile = pipeline.start(config)
-
-			#depth_sensor = profile.get_device().first_depth_sensor()
-			#depth_scale = depth_sensor.get_depth_scale()
-			#print("Depth Scale is: ", depth_scale)
-			#frames = pipeline.wait_for_frames()
 			break
 		except:
 			pass
@@ -382,37 +337,14 @@ def main():
 	#COL=720, ROW=1280
 	depth_scale = 0.0010000000474974513
 	startTime = time.time()
-	abcd = 0
 	while True:
-		#print(abcd)
-		abcd+=1
-		print('MORP Wokring')
-		#try:
-		#if depth_image_raw == None: continue
-		# Wait for a coherent pair of frames: depth and color
-		#frames = pipeline.wait_for_frames()
-		#depth_frame = frames.get_depth_frame()
-		#depth_frame = cv_image
-		#color_frame
-
-		#color_frame = frames.get_color_frame()
-		#if not depth_frame or not color_frame:
-		#	continue
-
-		# Convert images to numpy arrays
-		#depth_image = np.asanyarray(depth_frame.get_data(), dtype=float)
-		#color_image = np.asanyarray(color_frame.get_data())
-		# print(depth_image[360][550], len(depth_image[0]), str(depth_image[360][550] * depth_scale) + "m")
-
 		# first step
 
 		global depth_image_raw, color_image_raw, currentStatus, handle_easy
 		if type(depth_image_raw) == type(0) or type(color_image_raw) == type(0):
 			sleep(0.1)
-			##babbanner(bad=True)
 			continue
 		print('MORP CYCLE : ',abcd)
-		#banner("True")
 		depth_image, color_image = preGroundSeg(depth_image_raw, color_image_raw)
 		# last step
 		color_image, virtual_lane_available = GroundSeg(depth_image, color_image)
@@ -431,31 +363,11 @@ def main():
 			print('Morp easyGo stoppper :: ' + str(easyGo.stopper))
 		#LaneHandling(virtual_lane_available, UNAVAILABLE_THRES, 1)
 
-		# Stack both images horizontally
-		# images = np.hstack((color_image, depth_colormap))
-
-		# Show images
-		#cv2.namedWindow('RealSense', cv2.WINDOW_AUTOSIZE)
-		#cv2.imshow('RealSense', color_image)
-		#if cv2.waitKey(1) == 27: #esc
-		#	easyGo.stop()
-		#	break
-
 		# FPS
 		numFrame += 1
 
-		#if cv2.waitKey(1) == ord('f'):
-		#	endTime = time.time()
-		#	fps = round((float)(numFrame) / (endTime - startTime), 2)
-		#	print("###FPS = " + str(fps) + " ###")
-
-		#except Exception:
-		#	print("Error")
-			#pipeline.stop()
-			#easyGo.stop()
 
 	# Stop streaming
-	#pipeline.stop()
 	easyGo.stop()
 
 if __name__ == "__main__":

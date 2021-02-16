@@ -59,7 +59,7 @@ def dap(path, velRobot=0.1, verbose=0):     # path is 2D array (x, y)
     init_path = path
     global i, threshold_boundary
     while(True):
-        print('thread re1fuck')
+        print('thread re1')
         if rospy.get_param('/point_init'):
             #closest_pt()
             rospy.set_param('/point_init', False)
@@ -82,7 +82,6 @@ def dap(path, velRobot=0.1, verbose=0):     # path is 2D array (x, y)
         current_position = get_current_pose(start_position)
         #(x, y) when DPoom head to right, x decreases (negatively increases)
         # current_position and DAP's coordinates : straight(y), right(x)
-        #print('current_position :', current_position)
         if (path[i][0]-current_position[0])**2 + (path[i][1]-current_position[1])**2 < threshold_boundary**2:
             i = i+1
             if i == len(path):

@@ -1,6 +1,5 @@
 #! /usr/bin/env python
 # Name : EasyVector
-# TODO Get rid of useless code {uncalled}
 # HOWTO
 # easyVector.main(speed, desiredAngle)
 # First Angle set by IMU
@@ -22,7 +21,6 @@ from sensor_msgs.msg import Imu
 import threading
 import easyGo
 import imu2angle
-print('fuck1')
 
 global current_Angle, last_Angle
 global desired_Angle
@@ -89,13 +87,9 @@ def imuThread():
 
 
 print('[easyVector INIT]')
-#rospy.init_node('robot_mvs', anonymous=True)
 
-
-#rate = rospy.Rate(5000)
 
 def get_steer_Value(desiredAngle, speed=1):
-    #rospy.init_node('robot_mvs', anonymous=True)
     rate = rospy.Rate(5000)
     #rate.sleep() #Change if reaction time is slowReach at Desired Angle
 
@@ -111,11 +105,9 @@ def get_steer_Value(desiredAngle, speed=1):
     else:
         steer = (float(desiredAngle) - float(current_Angle)) * Kp
     '''
-    ###SHinsegye
-    ###
+
     desiredAngle=Conversion(desiredAngle)
-    #print('Converted desiredAngle :', desiredAngle)
-    ###
+
     optimalDegree = min([float(desiredAngle) - float(current_Angle),
                 -360+(float(desiredAngle) - float(current_Angle)),
                     360+(float(desiredAngle) - float(current_Angle))], key=abs)
@@ -161,7 +153,6 @@ if __name__ == '__main__':
     #sub_odom = rospy.Subscriber('/odom', Odometry, odom_callback) # the original name odom might be the same as other function.
     #sub_imu = rospy.Subscriber('/imu_yaw', Float32, yaw_callback)
 
-
     Kp = 1.7375 / 10
 
     rate = rospy.Rate(5000)
@@ -172,7 +163,6 @@ if __name__ == '__main__':
             easyGo.stop()
             print('STOP')
             cv2.waitKey(0)
-
 
         #steer = (float(desired_Angle) - float(current_Angle)) * Kp
         ####################################

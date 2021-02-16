@@ -1,7 +1,6 @@
 #! /usr/bin/env python
 import rospy
 from matplotlib import pyplot as plt
-# from nav_msgs.msg import Odometry
 from geometry_msgs.msg import PoseWithCovarianceStamped
 
 def callback(data):

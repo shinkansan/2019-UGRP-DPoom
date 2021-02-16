@@ -16,9 +16,8 @@ degrees2rad = math.pi / 180.0
 
 class Imu2Angles:
     def __init__(self):
-        print('fuck2')
+
         self.rate = _rospy.get_param('~rate', 2000.0)
-        print('fuck2')
         #self.imu_name = _rospy.get_param('~imu_name', 'imu')
 
         self.imu_name = 'imu'
@@ -28,27 +27,17 @@ class Imu2Angles:
         self.pitch = 0.0
         self.yaw = 0.0
 
-
         #self.pub_imu_roll_msg = Float32()
         #self.pub_imu_pitch_msg = Float32()
         #self.pub_imu_yaw_msg = Float32()
 
-        print('hello3')
         self.pub_imu_roll = _rospy.Publisher('/' + self.imu_name +'/roll', Float32, queue_size=1)
-        print('hello3')
         self.pub_imu_pitch = _rospy.Publisher('/' + self.imu_name +'/pitch', Float32, queue_size=1)
-
         self.pub_imu_yaw = _rospy.Publisher('/imu_yaw', Float32, queue_size=1)
-        print('hello2')
         self.sub = _rospy.Subscriber('/odom', Odometry, self.process_imu_message, queue_size=1)
 
         rate = _rospy.Rate(self.rate)
-        print('hello')
-        #_rospy.spin()
-        #print('hello2')
-        #while not _rospy.is_shutdown():
-        #    print('hello')
-        #    rate.sleep()
+
         _rospy.spin()
         rate = _rospy.Rate(5000)
         print('thread re3')
@@ -88,16 +77,12 @@ class Imu2Angles:
 # Main function.
 if __name__ == '__main__':
     # Initialize the node and name it.
-    print("asdf")
     _rospy.init_node('robot_mvs', anonymous=True)
-    print("asdf")
-    #try:
+
     obj = Imu2Angles()
-    #except:
-        #pass
+
 
 def init():
-    #_rospy.init_node('robot_mvs', anonymous=True)
     #try:
     obj = Imu2Angles()
     #except Exception as rex:

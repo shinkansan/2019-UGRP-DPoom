@@ -1,20 +1,17 @@
 # Auto Drive integration
 import threading
 import numpy
-#import banner
 import rospy
 rospy.init_node('robot_mvs', anonymous = False)
 import os
 import autodrive as ad
 import ground_seg as morp
-#from easygo import easyGo
 from easygo import easyGo as eg
-#import  easyDict
 import os
 def _cls():
   os.system("cls" if os.name == "nt" else "clear")
   pass
-# command set
+
 slam_launch_command = '''roslaunch realsense2_camera opensource_tracking_tk_localization.launch'''
 init_dpoom_command = '''sh init_dpoom.sh'''
 handle_mode = 'none'
@@ -33,9 +30,7 @@ def handle_master(mode):
         rospy.set_param('/dap_handle', False)
         morp.handle_easy = True
         print('***MORP Handle Status ***' + str(morp.handle_easy))
-        #GoEasy(morp.direc)
     print('Current handle mode ', handle_mode)
-    #banner.banner(handle_mode, ['morp', morp.handle_easy, 'DRIFT', DRIFT_handling_authority, 'adDrift', ad.DRIFT_handling_authority])
 
 def slam_launcher():
     os.system(slam_launch_command)
@@ -66,16 +61,13 @@ def GoEasy(direc):
 	if direc == 0:
 		easyGo.mvCurve(-SPEED, 0)
 	elif direc == 1:
-		#print("COME HERE")
 		easyGo.mvCurve(SPEED, 0)
 	elif direc == 2:
-		#print("COME HERE2")
 		easyGo.mvRotate(ROTATE_SPEED, -1, False)
 	elif direc == 3:
 		easyGo.mvRotate(ROTATE_SPEED, -1, True)
 
 def load_drive_component():
-
 
     #Start driving procedure
     print('Start driving componet...')
@@ -83,7 +75,6 @@ def load_drive_component():
     print('Slam loading')
     slam_thread = threading.Thread(target=slam_launcher)
     slam_thread.start()
-    # slam launch -> wait??
 
     #auto drive
 
