@@ -10,7 +10,7 @@ DPoom is an indoor robot self-driving around the DGIST dormitory lobby. For its 
 
   - *[DAP](easygo/readme.md)* : DPoom could drive along the provided path using DAP, which listening encoder and IMU (from OpenCR).
   
-  - *[autodrive.py](autodrive.py) integrates navigation modules such as GPP and motion planner (MORP).
+  - *[autodrive.py](autodrive.py)* integrates navigation modules such as GPP and motion planner (MORP).
   
   [integration.py](integration.py) integrates all required modules when autonomous driving. The gif below was recorded when we test the robot to autonomous driving in DGIST domitory lobby. 
 
