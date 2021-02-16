@@ -85,6 +85,10 @@ Geonhee Sim   / DGIST undergraduate @jane79<br/>
  - Intel Realsense Camera D435i
  - Turtlebot3 waffle pi
  - Outer HW printed by 3D-Printer
+ 
+## Honors
+DPoom won the 2019 Samsung Open Source Conference [(SOSCON)](https://www.soscon.net/) Robot Competition. 
+ [Media coverage](https://www.hankookilbo.com/News/Read/201911071492395741)
 
  ## Paper info
  Our paper had submitted to [IROS 2021](https://www.iros2021.org/)
