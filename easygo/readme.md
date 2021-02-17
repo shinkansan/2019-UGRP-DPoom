@@ -246,7 +246,7 @@ dap.Steer_Visualization(desired_steer):
 #desired_steer is a steer value DPoom should have to reach target location.
 ```
 <br/>
-<img src="../easygo/steering_wheel_image.jpg.png" alt="drawing" width="240"/>
+<img src="../easygo/steering_wheel_image.jpg" alt="drawing" width="240"/>
 <br/>
 
 
