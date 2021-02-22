@@ -39,7 +39,7 @@ Our navigation method can be simulated in Gazebo. Current state-of-the-art navig
 # Project Info
 >__2019/12/5 We opened our github repos to public!!.__
 
-| Without distance cost | With distance cost |
+|  | |
 |---|---|
 |![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/docs/gif/DPoom_temp.gif)|![a](https://github.com/shinkansan/2019-UGRP-DPoom/blob/master/docs/gif/MORP_test.gif)|
 
