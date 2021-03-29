@@ -9,7 +9,7 @@ Click below for introduction video.
 
 ### Single board computer Lattepanda Alpha based indoor mobile robot DPoom, with fully autonomous driving system using single RGB-D camera Intel Realsense D435i. 
 
-> Keywards: autonomy, autonomous driving system, mobile robot, SLAM, ROS, RGB-D, Low-end, global path planning, motion planning, ground segmentaion, navigation, path tracking, control, Human-Robot Interaction
+> Keywords: autonomy, autonomous driving system, mobile robot, SLAM, ROS, RGB-D, Low-end, global path planning, motion planning, ground segmentaion, navigation, path tracking, control, Human-Robot Interaction
 
 
 # Installation
